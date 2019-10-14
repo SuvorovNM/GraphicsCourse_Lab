@@ -35,6 +35,8 @@ namespace Graphics_WinForm_Program
             lines.Add(newLine);
             Graphics g = Graphics.FromImage(PB_Draw.Image);
             g.DrawLine(new Pen(Color.Black,1), newLine.A, newLine.B);
+            g.FillEllipse(Brushes.Black, newLine.A.X - 3, newLine.A.Y - 3, 6, 6);
+            g.FillEllipse(Brushes.Black, newLine.B.X - 3, newLine.B.Y - 3, 6, 6);
             PB_Draw.Refresh();
             //PBDraw.Invalidate();
         }
@@ -59,16 +61,9 @@ namespace Graphics_WinForm_Program
             {
                 CurrentX = e.X;
                 CurrentY = e.Y;
-                if (Math.Abs((double)(CurrentX - ChosenLine.A.X) / (ChosenLine.B.X - ChosenLine.A.X+0.001) - (double)(CurrentY - ChosenLine.A.Y) / (ChosenLine.B.Y - ChosenLine.A.Y + 0.001)) < eps)
+                if (CheckForLine(CurrentX, CurrentY, ChosenLine))
                 {
-                    int minX = Math.Min(ChosenLine.B.X, ChosenLine.A.X);
-                    int maxX = Math.Max(ChosenLine.B.X, ChosenLine.A.X);
-                    int minY = Math.Min(ChosenLine.B.Y, ChosenLine.A.Y);
-                    int maxY = Math.Max(ChosenLine.B.Y, ChosenLine.A.Y);
-                    if (CurrentX >= minX && CurrentX <= maxX && CurrentY >= minY && CurrentY <= maxY)
-                    {
-                        movement = action.MoveLine;
-                    }
+                    movement = action.MoveLine;
                 }
                 if (Math.Abs(CurrentX-ChosenLine.A.X)<=3 && Math.Abs(CurrentY - ChosenLine.A.Y)<=3)
                 {
@@ -93,17 +88,10 @@ namespace Graphics_WinForm_Program
                     Line2D cur = null;
                     for (int i = 0; i < lines.Count; i++)
                     {
-                        if (Math.Abs((double)(CurrentX - lines[i].A.X) /(lines[i].B.X - lines[i].A.X) - (double)(CurrentY - lines[i].A.Y) /(lines[i].B.Y - lines[i].A.Y)) < eps)
+                        if (CheckForLine(CurrentX, CurrentY, lines[i]))
                         {
-                            int minX = Math.Min(lines[i].B.X, lines[i].A.X);
-                            int maxX = Math.Max(lines[i].B.X, lines[i].A.X);
-                            int minY = Math.Min(lines[i].B.Y, lines[i].A.Y);
-                            int maxY = Math.Max(lines[i].B.Y, lines[i].A.Y);
-                            if (CurrentX >= minX && CurrentX <= maxX && CurrentY >= minY && CurrentY <= maxY)
-                            {
-                                cur = lines[i];
-                                break;
-                            }
+                            cur = lines[i];
+                            break;
                         }
                     }
                     if (CurrentLine != null)
@@ -168,16 +156,16 @@ namespace Graphics_WinForm_Program
             PB_Draw.Image = bmp;
             PB_Draw.Refresh();
         }
-        public void ClearLine(Line2D line)
+
+        private void btn_DeleteLine_Click(object sender, EventArgs e)
         {
-            Graphics g = Graphics.FromImage(PB_Draw.Image);
-            g.Clear(Color.White);
-            foreach(Line2D line2D in lines)
-            {
-                if (line2D != line)
-                    g.DrawLine(new Pen(Color.Black, 1), line2D.A, line2D.B);
-            }
+            lines.Remove(ChosenLine);
+            DrawAllLines();
+            ChosenLine = null;
+            CurrentLine = null;
+            movement = action.NoAction;
         }
+
         public void DrawAllLines()
         {
             Graphics g = Graphics.FromImage(PB_Draw.Image);
@@ -185,36 +173,50 @@ namespace Graphics_WinForm_Program
             foreach (Line2D line2D in lines)
             {
                 g.DrawLine(new Pen(Color.Black, 1), line2D.A, line2D.B);
+                g.FillEllipse(Brushes.Black, line2D.A.X - 3, line2D.A.Y - 3, 6, 6);
+                g.FillEllipse(Brushes.Black, line2D.B.X-3, line2D.B.Y-3, 6, 6);
             }
             PB_Draw.Refresh();
             //PBDraw.Invalidate();
         }
-        public bool CheckForChosenLine(int CurrentX, int CurrentY)
-        {
-            if (Math.Abs((double)(CurrentX - ChosenLine.A.X) / (ChosenLine.B.X - ChosenLine.A.X + 0.001) - (double)(CurrentY - ChosenLine.A.Y) / (ChosenLine.B.Y - ChosenLine.A.Y + 0.001)) < eps)
-            {
-                int minX = Math.Min(ChosenLine.B.X, ChosenLine.A.X);
-                int maxX = Math.Max(ChosenLine.B.X, ChosenLine.A.X);
-                int minY = Math.Min(ChosenLine.B.Y, ChosenLine.A.Y);
-                int maxY = Math.Max(ChosenLine.B.Y, ChosenLine.A.Y);
-                if (CurrentX >= minX && CurrentX <= maxX && CurrentY >= minY && CurrentY <= maxY)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
         public bool CheckForLine(int CurrentX, int CurrentY, Line2D line)
         {
-            if (Math.Abs((double)(CurrentX - line.A.X) / (line.B.X - line.A.X + 0.001) - (double)(CurrentY - line.A.Y) / (line.B.Y - line.A.Y + 0.001)) < eps)
+            if (line.pos == position.normal)
             {
-                int minX = Math.Min(line.B.X, line.A.X);
-                int maxX = Math.Max(line.B.X, line.A.X);
-                int minY = Math.Min(line.B.Y, line.A.Y);
-                int maxY = Math.Max(line.B.Y, line.A.Y);
-                if (CurrentX >= minX && CurrentX <= maxX && CurrentY >= minY && CurrentY <= maxY)
+                if (Math.Abs((double)(CurrentX - line.A.X) / (line.B.X - line.A.X + 0.001) - (double)(CurrentY - line.A.Y) / (line.B.Y - line.A.Y + 0.001)) < eps)
                 {
-                    return true;
+                    int minX = Math.Min(line.B.X, line.A.X);
+                    int maxX = Math.Max(line.B.X, line.A.X);
+                    int minY = Math.Min(line.B.Y, line.A.Y);
+                    int maxY = Math.Max(line.B.Y, line.A.Y);
+                    if (CurrentX+3 >= minX && CurrentX-3 <= maxX && CurrentY+3 >= minY && CurrentY-3 <= maxY)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (line.pos == position.horizontal)
+            {
+                if (Math.Abs(CurrentY - line.A.Y)<4)
+                {
+                    int minX = Math.Min(line.B.X, line.A.X);
+                    int maxX = Math.Max(line.B.X, line.A.X);
+                    if (CurrentX+3 >= minX && CurrentX-3 <= maxX)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (line.pos == position.vertical)
+            {
+                if (Math.Abs(CurrentX - line.A.X)<4)
+                {
+                    int minY = Math.Min(line.B.Y, line.A.Y);
+                    int maxY = Math.Max(line.B.Y, line.A.Y);
+                    if (CurrentY+3 >= minY && CurrentY-3 <= maxY)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;

@@ -63,6 +63,7 @@
             this.btn_DeleteLine.TabIndex = 2;
             this.btn_DeleteLine.Text = "Delete";
             this.btn_DeleteLine.UseVisualStyleBackColor = true;
+            this.btn_DeleteLine.Click += new System.EventHandler(this.btn_DeleteLine_Click);
             // 
             // frm_Main
             // 
