@@ -13,48 +13,43 @@ namespace Graphics_WinForm_Program
     public class Line2D
     {
         private Point b;
-        public position pos;
+        //public position pos;
         private Point a;
+        public Double[] equation;
 
         public Line2D()
         {
             Random rng = new Random();
-            A = new Point(rng.Next(0, frm_Main.maxX), rng.Next(0, frm_Main.maxY));
-            B = new Point(rng.Next(0, frm_Main.maxX), rng.Next(0, frm_Main.maxY));
+            A = new Point(rng.Next(-frm_Main.maxX / 2, frm_Main.maxX / 2), rng.Next(-frm_Main.maxY / 2, frm_Main.maxY / 2));
+            B = new Point(rng.Next(-frm_Main.maxX / 2, frm_Main.maxX / 2), rng.Next(-frm_Main.maxY / 2, frm_Main.maxY / 2));
+            equation = new Double[3];
+            FindParams();
         }
+
+        private void FindParams()
+        {
+            equation[0] = A.Y - B.Y;
+            equation[1] = B.X - A.X;
+            equation[2] = A.X * B.Y - B.X * A.Y;
+        }
+
         public Line2D(int x1,int y1, int x2, int y2)
         {
             A = new Point(x1, y1);
             B = new Point(x2, y2);
+            FindParams();
         }
 
         public Point A { get => a;
             set
             {
                 a = value;
-                if (Math.Abs(a.X-b.X)<4)
-                {
-                    pos = position.vertical;
-                }
-                else if (Math.Abs(a.Y - b.Y) < 4)
-                {
-                    pos = position.horizontal;
-                }
-                else pos = position.normal;
+                
             }
         }
         public Point B { get => b; set
             {
                 b = value;
-                if (Math.Abs(a.X - b.X) < 4)
-                {
-                    pos = position.vertical;
-                }
-                else if (Math.Abs(a.Y - b.Y) < 4)
-                {
-                    pos = position.horizontal;
-                }
-                else pos = position.normal;
             }
         }
 
@@ -62,14 +57,17 @@ namespace Graphics_WinForm_Program
         {
             A = new Point(a.X + xOffset, a.Y + yOffset);
             B = new Point(b.X + xOffset, b.Y + yOffset);
+            FindParams();
         }
         public void MoveA(int xOffset, int yOffset)
         {
             A = new Point(a.X + xOffset, a.Y + yOffset);
+            FindParams();
         }
         public void MoveB(int xOffset, int yOffset)
         {
             B = new Point(b.X + xOffset, b.Y + yOffset);
+            FindParams();
         }
     }
 }

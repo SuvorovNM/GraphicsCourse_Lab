@@ -31,6 +31,7 @@
             this.PB_Draw = new System.Windows.Forms.PictureBox();
             this.btn_CreateLine = new System.Windows.Forms.Button();
             this.btn_DeleteLine = new System.Windows.Forms.Button();
+            this.TB_Mouse_Coordinates = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).BeginInit();
             this.SuspendLayout();
             // 
@@ -41,6 +42,7 @@
             this.PB_Draw.Size = new System.Drawing.Size(650, 450);
             this.PB_Draw.TabIndex = 0;
             this.PB_Draw.TabStop = false;
+            this.PB_Draw.Paint += new System.Windows.Forms.PaintEventHandler(this.PB_Draw_Paint);
             this.PB_Draw.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PB_Draw_MouseDown);
             this.PB_Draw.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PB_Draw_MouseMove);
             this.PB_Draw.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PB_Draw_MouseUp);
@@ -65,11 +67,20 @@
             this.btn_DeleteLine.UseVisualStyleBackColor = true;
             this.btn_DeleteLine.Click += new System.EventHandler(this.btn_DeleteLine_Click);
             // 
+            // TB_Mouse_Coordinates
+            // 
+            this.TB_Mouse_Coordinates.Location = new System.Drawing.Point(676, 420);
+            this.TB_Mouse_Coordinates.Name = "TB_Mouse_Coordinates";
+            this.TB_Mouse_Coordinates.ReadOnly = true;
+            this.TB_Mouse_Coordinates.Size = new System.Drawing.Size(100, 20);
+            this.TB_Mouse_Coordinates.TabIndex = 3;
+            // 
             // frm_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 452);
+            this.Controls.Add(this.TB_Mouse_Coordinates);
             this.Controls.Add(this.btn_DeleteLine);
             this.Controls.Add(this.btn_CreateLine);
             this.Controls.Add(this.PB_Draw);
@@ -78,6 +89,7 @@
             this.Load += new System.EventHandler(this.frm_Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -86,6 +98,7 @@
         private System.Windows.Forms.PictureBox PB_Draw;
         private System.Windows.Forms.Button btn_CreateLine;
         private System.Windows.Forms.Button btn_DeleteLine;
+        private System.Windows.Forms.TextBox TB_Mouse_Coordinates;
     }
 }
 
