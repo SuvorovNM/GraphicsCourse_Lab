@@ -23,11 +23,14 @@ namespace Graphics_WinForm_Program
         public Line2D CurrentLine;
         public Line2D ChosenLine;
         public List<Line2D> ChosenGroupOfLines;
+        public List<Line2DGroup> ListOfGroups;
+        public Line2DGroup ChosenGroup;
         const double eps = 0.1;
         Point startPosition;
         public frm_Main()
         {
             InitializeComponent();
+            ListOfGroups = new List<Line2DGroup>();
         }
 
         private void btn_CreateLine_Click(object sender, EventArgs e)
@@ -38,7 +41,7 @@ namespace Graphics_WinForm_Program
             Graphics g = Graphics.FromImage(PB_Draw.Image);
             g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
             g.ScaleTransform(1, -1);
-            g.DrawLine(new Pen(Color.Black,1), newLine.A, newLine.B);
+            g.DrawLine(new Pen(Color.Black,1), newLine.A.X, newLine.A.Y, newLine.B.X, newLine.B.Y);
             g.FillEllipse(Brushes.Black, newLine.A.X - 3, newLine.A.Y - 3, 6, 6);
             g.FillEllipse(Brushes.Black, newLine.B.X - 3, newLine.B.Y - 3, 6, 6);
             PB_Draw.Refresh();
@@ -59,27 +62,7 @@ namespace Graphics_WinForm_Program
                 Graphics g = Graphics.FromImage(PB_Draw.Image);
                 g.DrawString(ChosenLine.A.X + "; " + ChosenLine.A.Y, f, Brushes.Black, new PointF(ChosenLine.A.X - 3 + maxX / 2, maxY/2 - ChosenLine.A.Y + 5));
                 g.DrawString(ChosenLine.B.X + "; " + ChosenLine.B.Y, f, Brushes.Black, new PointF(ChosenLine.B.X - 3 + maxX / 2, maxY / 2 - ChosenLine.B.Y + 5));
-                var A = ChosenLine.equation[0];
-                var B = ChosenLine.equation[1];
-                var C = ChosenLine.equation[2];
-                string strEquation = "";
-                if (B>=0 && C >= 0)
-                {
-                    strEquation = A + "X +" + B + "Y +" + C;
-                }
-                else if (C >= 0)
-                {
-                    strEquation = A + "X " + B + "Y +" + C;
-                }
-                else if (B >= 0)
-                {
-                    strEquation = A + "X +" + B + "Y " + C;
-                }
-                else
-                {
-                    strEquation = A + "X " + B + "Y " + C;
-                }
-                g.DrawString(strEquation, f, Brushes.Black, new PointF((ChosenLine.B.X + maxX / 2 + ChosenLine.A.X + maxX / 2) / 2, (maxY / 2 - ChosenLine.B.Y + maxY / 2 - ChosenLine.A.Y) / 2));
+                g.DrawString(ChosenLine.UserEq, f, Brushes.Black, new PointF((ChosenLine.B.X + maxX / 2 + ChosenLine.A.X + maxX / 2) / 2, (maxY / 2 - ChosenLine.B.Y + maxY / 2 - ChosenLine.A.Y) / 2));
                 PB_Draw.Refresh();
             }
             else if (ChosenLine != null)//&&movement==action.NoAction
@@ -99,17 +82,34 @@ namespace Graphics_WinForm_Program
                         break;
                     }
                 }
-                if (cur!=null && !ChosenGroupOfLines.Contains(cur))
+               // if (cur!=null && !ChosenGroupOfLines.Contains(cur))
+                if (cur!=null)
                 {
                     ChosenGroupOfLines.Add(cur);
                     Graphics g = Graphics.FromImage(PB_Draw.Image);
                     g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
                     g.ScaleTransform(1, -1);
-                    g.DrawLine(new Pen(Color.Red, 1), cur.A, cur.B);
+                    g.DrawLine(new Pen(Color.Red, 1), cur.A.X, cur.A.Y, cur.B.X, cur.B.Y);
                     PB_Draw.Refresh();
                 }
                 ChosenLine = cur;
             }            
+            chosenGroup();
+            if (ChosenLine != null && ChosenGroup != null)
+            {
+                Graphics g = Graphics.FromImage(PB_Draw.Image);
+                g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
+                g.ScaleTransform(1, -1);
+                foreach (Line2D ln2d in ChosenGroup.lines)
+                {
+                    g.DrawLine(new Pen(Color.Red, 1), ln2d.A.X, ln2d.A.Y, ln2d.B.X, ln2d.B.Y);
+                }
+                Refresh();
+            }
+            if (ChosenLine == null)
+            {
+                DrawAllLines();
+            }
         }
 
         private void PB_Draw_MouseDown(object sender, MouseEventArgs e)
@@ -119,11 +119,11 @@ namespace Graphics_WinForm_Program
             {
                 CurrentX = e.X - maxX / 2;
                 CurrentY = maxY / 2 - e.Y;
-                if (CheckForLine(CurrentX, CurrentY, ChosenLine) && ChosenGroupOfLines.Count == 0)
+                if (CheckForLine(CurrentX, CurrentY, ChosenLine) && ChosenGroup== null)
                 {
                     movement = action.MoveLine;
                 }
-                else if (ChosenGroupOfLines.Count > 0)//CheckForLine(CurrentX, CurrentY, ChosenLine) && 
+                else if (ChosenGroup!=null)//CheckForLine(CurrentX, CurrentY, ChosenLine) && 
                 {
                     movement = action.MoveLines;
                 }
@@ -136,6 +136,10 @@ namespace Graphics_WinForm_Program
                     movement = action.MovePointB;
                 }
                 startPosition = new Point(CurrentX, CurrentY);
+            }
+            if (CurrentLine == null)
+            {
+                DrawAllLines();
             }
         }
 
@@ -159,20 +163,20 @@ namespace Graphics_WinForm_Program
                     }
                     if (CurrentLine != null && (!ChosenGroupOfLines.Contains(CurrentLine)) &&!(ModifierKeys == Keys.Control && cur !=null && ChosenLine == cur))
                     {
-                        Graphics g = Graphics.FromImage(PB_Draw.Image);
+                        /*Graphics g = Graphics.FromImage(PB_Draw.Image);
                         g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
                         g.ScaleTransform(1, -1);
-                        g.DrawLine(new Pen(Color.Black, 1), CurrentLine.A, CurrentLine.B);
-                        PB_Draw.Refresh();
+                        g.DrawLine(new Pen(Color.Black, 1), CurrentLine.A.X, CurrentLine.A.Y, CurrentLine.B.X, CurrentLine.B.Y);
+                        PB_Draw.Refresh();*/
                         CurrentLine = null;
                     }
                     if (cur != null)
                     {
-                        Graphics g = Graphics.FromImage(PB_Draw.Image);
+                        /*Graphics g = Graphics.FromImage(PB_Draw.Image);
                         g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
                         g.ScaleTransform(1, -1);
-                        g.DrawLine(new Pen(Color.Red, 1), cur.A, cur.B);
-                        PB_Draw.Refresh();
+                        g.DrawLine(new Pen(Color.Red, 1), cur.A.X, cur.A.Y, cur.B.X, cur.B.Y);
+                        PB_Draw.Refresh();*/
                         CurrentLine = cur;
                     }
                     else
@@ -186,27 +190,27 @@ namespace Graphics_WinForm_Program
                 switch (movement)
                 {
                     case action.MoveLine:                        
-                        ChosenLine.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y);
+                        ChosenLine.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
                         startPosition.X = CurrentX;
                         startPosition.Y = CurrentY;
                         DrawAllLines();
                         break;
                     case action.MovePointA:
-                        ChosenLine.MoveA(CurrentX - startPosition.X, CurrentY - startPosition.Y);
+                        ChosenLine.MoveA(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
                         startPosition.X = CurrentX;
                         startPosition.Y = CurrentY;
                         DrawAllLines();
                         break;
                     case action.MovePointB:
-                        ChosenLine.MoveB(CurrentX - startPosition.X, CurrentY - startPosition.Y);
+                        ChosenLine.MoveB(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
                         startPosition.X = CurrentX;
                         startPosition.Y = CurrentY;
                         DrawAllLines();
                         break;
                     case action.MoveLines:
-                        foreach (Line2D line2D in ChosenGroupOfLines)
+                        foreach (Line2D line2D in ChosenGroup.lines)
                         {
-                            line2D.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y);
+                            line2D.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
                         }
                         startPosition.X = CurrentX;
                         startPosition.Y = CurrentY;
@@ -234,6 +238,25 @@ namespace Graphics_WinForm_Program
             //PB_Draw.Refresh();
             ShowAxes();
             PB_Draw.Refresh();
+            dgv_Massive.Rows.Add(4);
+            dgv_Massive.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_Massive.Rows[0].Cells[0].Value = "0";
+            dgv_Massive.Rows[0].Cells[1].Value = "0";
+            dgv_Massive.Rows[0].Cells[2].Value = "0";
+            dgv_Massive.Rows[0].Cells[3].Value = "0";
+            dgv_Massive.Rows[1].Cells[0].Value = "0";
+            dgv_Massive.Rows[1].Cells[1].Value = "0";
+            dgv_Massive.Rows[1].Cells[2].Value = "0";
+            dgv_Massive.Rows[1].Cells[3].Value = "0";
+            dgv_Massive.Rows[2].Cells[0].Value = "0";
+            dgv_Massive.Rows[2].Cells[1].Value = "0";
+            dgv_Massive.Rows[2].Cells[2].Value = "0";
+            dgv_Massive.Rows[2].Cells[3].Value = "0";
+            dgv_Massive.Rows[3].Cells[0].Value = "0";
+            dgv_Massive.Rows[3].Cells[1].Value = "0";
+            dgv_Massive.Rows[3].Cells[2].Value = "0";
+            dgv_Massive.Rows[3].Cells[3].Value = "0";
+
         }
 
         private void btn_DeleteLine_Click(object sender, EventArgs e)
@@ -280,6 +303,98 @@ namespace Graphics_WinForm_Program
         {
         }
 
+        private void btn_Group_Click(object sender, EventArgs e)
+        {
+            if (ChosenGroupOfLines.Count > 0)
+            {
+                //List<Line2D> gr = new List<Line2D>();
+                var tmp = ChosenGroupOfLines.ToArray();
+                foreach(Line2D l2d in tmp)
+                foreach (Line2DGroup l2dgr in ListOfGroups)
+                {
+                    if (l2dgr.lines.Contains(l2d))
+                        {
+                            foreach(Line2D line2 in l2dgr.lines)
+                            {
+                                if (!ChosenGroupOfLines.Contains(line2))
+                                    ChosenGroupOfLines.Add(line2);
+                            }
+                        }
+                }
+
+                Line2DGroup lgr = new Line2DGroup(ChosenGroupOfLines);//ChosenGroupOfLines
+                ListOfGroups.Add(lgr);
+                ChosenGroupOfLines.Clear();
+            }
+        }
+
+        private void btn_Ungroup_Click(object sender, EventArgs e)
+        {
+            ListOfGroups.Remove(ChosenGroup);
+            DrawAllLines();
+        }
+
+        public void chosenGroup()
+        {
+            bool OK = false;
+            if (ListOfGroups!= null && ListOfGroups.Count>0)
+            foreach(Line2DGroup gr in ListOfGroups)
+            {
+                if (gr.lines.Contains(ChosenLine))
+                {
+                    ChosenGroup = gr;
+                    OK = true;
+                }
+            }
+            if (!OK) ChosenGroup = null;
+        }
+
+        private void btn_Exec_Click(object sender, EventArgs e)
+        {
+            float[,] operation = new float[4, 4];
+            //string st = dgv_Massive.Rows[0].Cells[1].Value.ToString();
+            float.TryParse(dgv_Massive.Rows[0].Cells[0].Value.ToString(), out operation[0, 0]);
+            float.TryParse(dgv_Massive.Rows[0].Cells[1].Value.ToString(), out operation[0, 1]);
+            float.TryParse(dgv_Massive.Rows[0].Cells[2].Value.ToString(), out operation[0, 2]);
+            float.TryParse(dgv_Massive.Rows[0].Cells[3].Value.ToString(), out operation[0, 3]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[0].Value.ToString(), out operation[1, 0]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[1].Value.ToString(), out operation[1, 1]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[2].Value.ToString(), out operation[1, 2]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[3].Value.ToString(), out operation[1, 3]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[0].Value.ToString(), out operation[2, 0]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[1].Value.ToString(), out operation[2, 1]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[2].Value.ToString(), out operation[2, 2]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[3].Value.ToString(), out operation[2, 3]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[0].Value.ToString(), out operation[3, 0]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[1].Value.ToString(), out operation[3, 1]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[2].Value.ToString(), out operation[3, 2]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[3].Value.ToString(), out operation[3, 3]);
+            if (ChosenGroup != null)
+            {
+                double OK = 0;
+                //Отрицательные значения?
+                foreach(Line2D ln2d in ChosenGroup.lines)
+                {
+                    float xcoord = (((float)ln2d.A.X) * operation[0, 0] + ((float)ln2d.A.Y) * operation[1, 0] + ((float)ln2d.A.Z) * operation[2, 0] + operation[3, 0]);
+                    float ycoord = (((float)ln2d.A.X) * operation[0, 1] + ((float)ln2d.A.Y) * operation[1, 1] + ((float)ln2d.A.Z) * operation[2, 1] + operation[3, 1]);
+                    float zcoord = (((float)ln2d.A.X) * operation[0, 2] + ((float)ln2d.A.Y) * operation[1, 2] + ((float)ln2d.A.Z) * operation[2, 2] + operation[3, 2]);
+                    float OKcoord = (((float)ln2d.A.X) * operation[0, 3] + ((float)ln2d.A.Y) * operation[1, 3] + ((float)ln2d.A.Z) * operation[2, 3] + operation[3, 3]);
+                    ln2d.A.X = (int)(xcoord / OKcoord);
+                    ln2d.A.Y = (int)(ycoord / OKcoord);
+                    ln2d.A.Z = (int)(zcoord / OKcoord);                    
+                    xcoord = (((float)ln2d.B.X) * operation[0, 0] + ((float)ln2d.B.Y) * operation[1, 0] + ((float)ln2d.B.Z) * operation[2, 0] + operation[3, 0]);
+                    ycoord = (((float)ln2d.B.X) * operation[0, 1] + ((float)ln2d.B.Y) * operation[1, 1] + ((float)ln2d.B.Z) * operation[2, 1] + operation[3, 1]);
+                    zcoord = (((float)ln2d.B.X) * operation[0, 2] + ((float)ln2d.B.Y) * operation[1, 2] + ((float)ln2d.B.Z) * operation[2, 2] + operation[3, 2]);
+                    OKcoord = (((float)ln2d.B.X) * operation[0, 3] + ((float)ln2d.B.Y) * operation[1, 3] + ((float)ln2d.B.Z) * operation[2, 3] + operation[3, 3]);
+                    ln2d.B.X = (int)(xcoord / OKcoord);
+                    ln2d.B.Y = (int)(ycoord / OKcoord);
+                    ln2d.B.Z = (int)(zcoord / OKcoord);
+                    ln2d.FindParams();
+                }
+            }
+            DrawAllLines();
+        }
+
         public void DrawAllLines()
         {            
             Graphics g = Graphics.FromImage(PB_Draw.Image);
@@ -290,7 +405,7 @@ namespace Graphics_WinForm_Program
             ShowAxes();
             foreach (Line2D line2D in lines)
             {
-                g.DrawLine(new Pen(Color.Black, 1), line2D.A, line2D.B);
+                g.DrawLine(new Pen(Color.Black, 1), line2D.A.X, line2D.A.Y, line2D.B.X, line2D.B.Y);
                 g.FillEllipse(Brushes.Black, line2D.A.X - 3, line2D.A.Y - 3, 6, 6);               
                 //g.DrawString(line2D.A.X + "; " + line2D.A.Y, f, Brushes.Black, new PointF(line2D.A.X - 3, line2D.A.Y - 3));
                 g.FillEllipse(Brushes.Black, line2D.B.X-3, line2D.B.Y-3, 6, 6);

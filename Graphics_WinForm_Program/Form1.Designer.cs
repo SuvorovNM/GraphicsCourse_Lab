@@ -32,7 +32,16 @@
             this.btn_CreateLine = new System.Windows.Forms.Button();
             this.btn_DeleteLine = new System.Windows.Forms.Button();
             this.TB_Mouse_Coordinates = new System.Windows.Forms.TextBox();
+            this.btn_Group = new System.Windows.Forms.Button();
+            this.btn_Ungroup = new System.Windows.Forms.Button();
+            this.dgv_Massive = new System.Windows.Forms.DataGridView();
+            this.clm_X = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clm_Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clm_Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clm_OK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btn_Exec = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_Massive)).BeginInit();
             this.SuspendLayout();
             // 
             // PB_Draw
@@ -69,17 +78,87 @@
             // 
             // TB_Mouse_Coordinates
             // 
-            this.TB_Mouse_Coordinates.Location = new System.Drawing.Point(676, 420);
+            this.TB_Mouse_Coordinates.Location = new System.Drawing.Point(657, 420);
             this.TB_Mouse_Coordinates.Name = "TB_Mouse_Coordinates";
             this.TB_Mouse_Coordinates.ReadOnly = true;
-            this.TB_Mouse_Coordinates.Size = new System.Drawing.Size(100, 20);
+            this.TB_Mouse_Coordinates.Size = new System.Drawing.Size(131, 20);
             this.TB_Mouse_Coordinates.TabIndex = 3;
+            // 
+            // btn_Group
+            // 
+            this.btn_Group.Location = new System.Drawing.Point(657, 70);
+            this.btn_Group.Name = "btn_Group";
+            this.btn_Group.Size = new System.Drawing.Size(131, 23);
+            this.btn_Group.TabIndex = 4;
+            this.btn_Group.Text = "Group";
+            this.btn_Group.UseVisualStyleBackColor = true;
+            this.btn_Group.Click += new System.EventHandler(this.btn_Group_Click);
+            // 
+            // btn_Ungroup
+            // 
+            this.btn_Ungroup.Location = new System.Drawing.Point(657, 99);
+            this.btn_Ungroup.Name = "btn_Ungroup";
+            this.btn_Ungroup.Size = new System.Drawing.Size(131, 23);
+            this.btn_Ungroup.TabIndex = 5;
+            this.btn_Ungroup.Text = "Ungroup";
+            this.btn_Ungroup.UseVisualStyleBackColor = true;
+            this.btn_Ungroup.Click += new System.EventHandler(this.btn_Ungroup_Click);
+            // 
+            // dgv_Massive
+            // 
+            this.dgv_Massive.AllowUserToAddRows = false;
+            this.dgv_Massive.AllowUserToDeleteRows = false;
+            this.dgv_Massive.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_Massive.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clm_X,
+            this.clm_Y,
+            this.clm_Z,
+            this.clm_OK});
+            this.dgv_Massive.Location = new System.Drawing.Point(658, 129);
+            this.dgv_Massive.MultiSelect = false;
+            this.dgv_Massive.Name = "dgv_Massive";
+            this.dgv_Massive.Size = new System.Drawing.Size(390, 150);
+            this.dgv_Massive.TabIndex = 6;
+            // 
+            // clm_X
+            // 
+            this.clm_X.HeaderText = "X";
+            this.clm_X.Name = "clm_X";
+            // 
+            // clm_Y
+            // 
+            this.clm_Y.HeaderText = "Y";
+            this.clm_Y.Name = "clm_Y";
+            // 
+            // clm_Z
+            // 
+            this.clm_Z.HeaderText = "Z";
+            this.clm_Z.Name = "clm_Z";
+            // 
+            // clm_OK
+            // 
+            this.clm_OK.HeaderText = "OK";
+            this.clm_OK.Name = "clm_OK";
+            // 
+            // btn_Exec
+            // 
+            this.btn_Exec.Location = new System.Drawing.Point(916, 294);
+            this.btn_Exec.Name = "btn_Exec";
+            this.btn_Exec.Size = new System.Drawing.Size(132, 22);
+            this.btn_Exec.TabIndex = 7;
+            this.btn_Exec.Text = "Execute";
+            this.btn_Exec.UseVisualStyleBackColor = true;
+            this.btn_Exec.Click += new System.EventHandler(this.btn_Exec_Click);
             // 
             // frm_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 452);
+            this.ClientSize = new System.Drawing.Size(1060, 452);
+            this.Controls.Add(this.btn_Exec);
+            this.Controls.Add(this.dgv_Massive);
+            this.Controls.Add(this.btn_Ungroup);
+            this.Controls.Add(this.btn_Group);
             this.Controls.Add(this.TB_Mouse_Coordinates);
             this.Controls.Add(this.btn_DeleteLine);
             this.Controls.Add(this.btn_CreateLine);
@@ -88,6 +167,7 @@
             this.Text = "Graphics Project";
             this.Load += new System.EventHandler(this.frm_Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_Massive)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -99,6 +179,14 @@
         private System.Windows.Forms.Button btn_CreateLine;
         private System.Windows.Forms.Button btn_DeleteLine;
         private System.Windows.Forms.TextBox TB_Mouse_Coordinates;
+        private System.Windows.Forms.Button btn_Group;
+        private System.Windows.Forms.Button btn_Ungroup;
+        private System.Windows.Forms.DataGridView dgv_Massive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clm_X;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clm_Y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clm_Z;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clm_OK;
+        private System.Windows.Forms.Button btn_Exec;
     }
 }
 
