@@ -285,15 +285,22 @@ namespace Graphics_WinForm_Program
         }
         private void btn_DeleteLine_Click(object sender, EventArgs e)
         {
-            if (ChosenGroupOfLines.Count == 0)
+            if (ChosenGroupOfLines.Count == 0 && (ChosenGroup == null || ChosenGroup.lines.Count == 0))
                 lines.Remove(ChosenLine);
-            else
+            else if (ChosenGroupOfLines.Count > 0)
             {
                 foreach(Line2D line2D in ChosenGroupOfLines)
                 {
                     lines.Remove(line2D);
                 }
                 ChosenGroupOfLines.Clear();
+            }
+            else
+            {
+                foreach (Line2D line2D in ChosenGroup.lines)
+                {
+                    lines.Remove(line2D);
+                }
             }
             DrawAllLines();
             ChosenLine = null;
@@ -421,6 +428,9 @@ namespace Graphics_WinForm_Program
                 ln2d.A.X = (int)(xcoord / OKcoord);
                 ln2d.A.Y = (int)(ycoord / OKcoord);
                 ln2d.A.Z = (int)(zcoord / OKcoord);
+                ln2d.Local_A.X = (int)(xcoord / OKcoord);
+                ln2d.Local_A.Y = (int)(ycoord / OKcoord);
+                ln2d.Local_A.Z = (int)(zcoord / OKcoord);
             }
             else
             {
@@ -437,6 +447,9 @@ namespace Graphics_WinForm_Program
                 ln2d.B.X = (int)(xcoord / OKcoord);
                 ln2d.B.Y = (int)(ycoord / OKcoord);
                 ln2d.B.Z = (int)(zcoord / OKcoord);
+                ln2d.Local_B.X = (int)(xcoord / OKcoord);
+                ln2d.Local_B.Y = (int)(ycoord / OKcoord);
+                ln2d.Local_B.Z = (int)(zcoord / OKcoord);
             }
             else
             {
@@ -497,20 +510,24 @@ namespace Graphics_WinForm_Program
             operation[2, 1] = -(float)Math.Cos(fi) * (float)Math.Sin(tetta);
             operation[2, 3] = -(float)Math.Cos(fi) * (float)Math.Cos(tetta) / Z;
             operation[3, 3] = 1;
-            if (ChosenGroup != null)
+            foreach (Line2D ln2d in lines)
             {
-                double OK = 0;
-                //Отрицательные значения?
-                foreach (Line2D ln2d in ChosenGroup.lines)
-                {
-                    MakeOperation(operation, ln2d, OperationType.Show);
-                }
-            }
-            else if (ChosenLine != null)
-            {
-                Line2D ln2d = ChosenLine;
                 MakeOperation(operation, ln2d, OperationType.Show);
             }
+            /* if (ChosenGroup != null)
+             {
+                 double OK = 0;
+                 //Отрицательные значения?
+                 foreach (Line2D ln2d in ChosenGroup.lines)
+                 {
+                     MakeOperation(operation, ln2d, OperationType.Show);
+                 }
+             }
+             else if (ChosenLine != null)
+             {
+                 Line2D ln2d = ChosenLine;
+                 MakeOperation(operation, ln2d, OperationType.Show);
+             }*/
             DrawAllLines();
         }
 
@@ -559,7 +576,12 @@ namespace Graphics_WinForm_Program
             int maxY = Math.Max(line.Local_B.Y, line.Local_A.Y);
             if (CurrentX + 3 >= minX && CurrentX - 3 <= maxX && CurrentY + 3 >= minY && CurrentY - 3 <= maxY)
             {
-                return Math.Abs(CurrentX * line.equation[0] + CurrentY * line.equation[1] + line.equation[2]) < 1000;
+                bool res = Math.Abs(CurrentX * line.equation[0] + CurrentY * line.equation[1] + line.equation[2]) < 1000;
+                if (res)
+                {
+                    res = true;
+                }
+                return res;
             }
             return false;
         }

@@ -81,8 +81,20 @@ namespace Graphics_WinForm_Program
 
         public void Move(int xOffset, int yOffset, int zOffset)
         {
-            A = new Point3D(a.X + xOffset, a.Y + yOffset, a.Z + zOffset);
-            B = new Point3D(b.X + xOffset, b.Y + yOffset, b.Z + zOffset);
+            //A = new Point3D(a.X + xOffset, a.Y + yOffset, a.Z + zOffset);            
+            Local_A.X = Local_A.X + xOffset;
+            Local_A.Y = Local_A.Y + yOffset;
+            Local_A.Z = Local_A.Z + zOffset;
+            a.X = a.X + xOffset;
+            a.Y = a.Y + yOffset;
+            a.Z = a.Z + zOffset;
+            //B = new Point3D(b.X + xOffset, b.Y + yOffset, b.Z + zOffset);
+            Local_B.X = Local_B.X + xOffset;
+            Local_B.Y = Local_B.Y + yOffset;
+            Local_B.Z = Local_B.Z + zOffset;
+            b.X = b.X + xOffset;
+            b.Y = b.Y + yOffset;
+            b.Z = b.Z + zOffset;
             FindParams();
         }
         public void MoveA(int xOffset, int yOffset, int zOffset)
