@@ -125,11 +125,7 @@ namespace Graphics_WinForm_Program
                 {
                     movement = action.MoveLine;
                 }
-                else if (ChosenGroup!=null)//CheckForLine(CurrentX, CurrentY, ChosenLine) && 
-                {
-                    movement = action.MoveLines;
-                }
-                else if (Math.Abs(CurrentX-ChosenLine.Local_A.X)<=3 && Math.Abs(CurrentY - ChosenLine.Local_A.Y)<=3) // -- //
+                if (Math.Abs(CurrentX - ChosenLine.Local_A.X) <= 3 && Math.Abs(CurrentY - ChosenLine.Local_A.Y) <= 3) // -- //
                 {
                     movement = action.MovePointA;
                 }
@@ -137,6 +133,11 @@ namespace Graphics_WinForm_Program
                 {
                     movement = action.MovePointB;
                 }
+                else if (ChosenGroup!=null)//CheckForLine(CurrentX, CurrentY, ChosenLine) && 
+                {
+                    movement = action.MoveLines;
+                }
+                //else 
                 startPosition = new Point(CurrentX, CurrentY);
             }
             if (CurrentLine == null)
@@ -209,7 +210,7 @@ namespace Graphics_WinForm_Program
                         startPosition.Y = CurrentY;
                         DrawAllLines();
                         break;
-                    case action.MoveLines:
+                    case action.MoveLines: // -- // Место для костыля
                         foreach (Line2D line2D in ChosenGroup.lines)
                         {
                             line2D.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
@@ -338,8 +339,15 @@ namespace Graphics_WinForm_Program
         {
             if (ChosenGroupOfLines.Count > 0)
             {
-                //List<Line2D> gr = new List<Line2D>();
+                List<Line2D> gr = new List<Line2D>();
                 var tmp = ChosenGroupOfLines.ToArray();
+                foreach (Line2D l2d in tmp)
+                {
+                    if (!gr.Contains(l2d))
+                    {
+                        gr.Add(l2d);
+                    }
+                }
                 foreach(Line2D l2d in tmp)
                 foreach (Line2DGroup l2dgr in ListOfGroups)
                 {
@@ -348,11 +356,12 @@ namespace Graphics_WinForm_Program
                             foreach(Line2D line2 in l2dgr.lines)
                             {
                                 if (!ChosenGroupOfLines.Contains(line2))
-                                    ChosenGroupOfLines.Add(line2);
+                                    //ChosenGroupOfLines.Add(line2);
+                                    gr.Add(line2);
                             }
                         }
                 }
-
+                ChosenGroupOfLines = gr;
                 Line2DGroup lgr = new Line2DGroup(ChosenGroupOfLines);//ChosenGroupOfLines
                 ListOfGroups.Add(lgr);
                 ChosenGroupOfLines.Clear();
