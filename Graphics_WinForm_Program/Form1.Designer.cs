@@ -593,6 +593,7 @@
             this.tsm_Bisection.Name = "tsm_Bisection";
             this.tsm_Bisection.Size = new System.Drawing.Size(180, 22);
             this.tsm_Bisection.Text = "Bisection";
+            this.tsm_Bisection.Click += new System.EventHandler(this.tsm_Bisection_Click);
             // 
             // frm_Main
             // 

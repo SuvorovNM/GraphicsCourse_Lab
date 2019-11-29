@@ -63,7 +63,24 @@ namespace Graphics_WinForm_Program
             }
             else if (movement == action.Height)
             {
-
+                //Вычислить Z
+                var A = ChosenLine.equation[0];
+                var B = ChosenLine.equation[1];
+                var C = ChosenLine.equation[2];
+                int Xval = (int)((-A * C - B * A * CurrentY + B * B * CurrentX) / (B * B + A * A));
+                int Yval = (int)((A * A * CurrentY - A * B * CurrentX - C * B) / (B * B + A * A));
+                int Zval;
+                if (Math.Abs(ChosenLine.vector[0]) > 0.00001)
+                {
+                    Zval = (int)(ChosenLine.A.Z + ChosenLine.vector[2] * ((Xval - ChosenLine.A.X) / ChosenLine.vector[0]));
+                }
+                else
+                {
+                    Zval = (int)(ChosenLine.A.Z + ChosenLine.vector[2] * ((Yval - ChosenLine.A.Y) / ChosenLine.vector[1]));
+                }
+                Point3D H = new Point3D(Xval, Yval , Zval);
+                lines.Add(new Line2D(CurrentX, CurrentY, 0, H.X, H.Y, H.Z));
+                DrawAllLines();
                 movement = action.NoAction;
             }
             if (ModifierKeys != Keys.Control && ChosenGroupOfLines.Count > 0 && CurrentLine != null)
@@ -79,8 +96,8 @@ namespace Graphics_WinForm_Program
 
                 Graphics g = Graphics.FromImage(PB_Draw.Image);
                 // -- //
-                g.DrawString(ChosenLine.Local_A.X + "; " + ChosenLine.Local_A.Y, f, Brushes.Black, new PointF(ChosenLine.Local_A.X - 3 + maxX / 2, maxY / 2 - ChosenLine.Local_A.Y + 5));
-                g.DrawString(ChosenLine.Local_B.X + "; " + ChosenLine.Local_B.Y, f, Brushes.Black, new PointF(ChosenLine.Local_B.X - 3 + maxX / 2, maxY / 2 - ChosenLine.Local_B.Y + 5));
+                g.DrawString(ChosenLine.Local_A.X + "; " + ChosenLine.Local_A.Y +"; " + ChosenLine.Local_A.Z, f, Brushes.Black, new PointF(ChosenLine.Local_A.X - 3 + maxX / 2, maxY / 2 - ChosenLine.Local_A.Y + 5));
+                g.DrawString(ChosenLine.Local_B.X + "; " + ChosenLine.Local_B.Y + "; " + ChosenLine.Local_B.Z, f, Brushes.Black, new PointF(ChosenLine.Local_B.X - 3 + maxX / 2, maxY / 2 - ChosenLine.Local_B.Y + 5));
                 g.DrawString(ChosenLine.UserEq, f, Brushes.Black, new PointF((ChosenLine.Local_B.X + maxX / 2 + ChosenLine.Local_A.X + maxX / 2) / 2, (maxY / 2 - ChosenLine.Local_B.Y + maxY / 2 - ChosenLine.Local_A.Y) / 2));
                 PB_Draw.Refresh();
                 tb1_X.Text = ChosenLine.A.X.ToString();
@@ -572,7 +589,10 @@ namespace Graphics_WinForm_Program
             if (ChosenLine != null)
             {
                 Int32.TryParse(tb1_Z.Text, out ChosenLine.A.Z);
-                Int32.TryParse(tb2_Z.Text, out ChosenLine.B.Z);
+                ChosenLine.Local_A.Z = ChosenLine.A.Z;
+               Int32.TryParse(tb2_Z.Text, out ChosenLine.B.Z);
+                ChosenLine.Local_B.Z = ChosenLine.B.Z;
+                ChosenLine.FindParams();
             }
             //DrawAllLines();
         }
@@ -682,6 +702,15 @@ namespace Graphics_WinForm_Program
         {
             if (ChosenLine != null)
                 movement = action.Height;
+        }
+
+        private void tsm_Bisection_Click(object sender, EventArgs e)
+        //Ожидается, что выбраны две линии (через Ctrl) - ChosenGroupOfLines
+        {
+            if (ChosenGroupOfLines!=null && ChosenGroupOfLines.Count == 2)
+            {
+
+            }
         }
 
         public void DrawAllLines()
