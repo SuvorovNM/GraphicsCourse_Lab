@@ -706,11 +706,79 @@ namespace Graphics_WinForm_Program
 
         private void tsm_Bisection_Click(object sender, EventArgs e)
         //Ожидается, что выбраны две линии (через Ctrl) - ChosenGroupOfLines
+        //Пока без Z
         {
             if (ChosenGroupOfLines!=null && ChosenGroupOfLines.Count == 2)
             {
+                var A1 = ChosenGroupOfLines[0].equation[0];
+                var B1 = ChosenGroupOfLines[0].equation[1];
+                var C1 = ChosenGroupOfLines[0].equation[2];
 
+                var A2 = ChosenGroupOfLines[1].equation[0];
+                var B2 = ChosenGroupOfLines[1].equation[1];
+                var C2 = ChosenGroupOfLines[1].equation[2];
+                if (A1 * B2 - A2 * B1 == 0)
+                    return;
+                /*int FirstX = -maxX / 2 + 10;
+                int FirstY = (int)(((A1 * (Math.Sqrt(A2 * A2 + B2 * B2)) - A2 * (Math.Sqrt(A1 * A1 + B1 * B1))) * -FirstX -
+                    C1 * (Math.Sqrt(A2 * A2 + B2 * B2) + C2 * (Math.Sqrt(A1 * A1 + B1 * B1)))) / (B1 * (Math.Sqrt(A2 * A2 + B2 * B2)) - B2 * (Math.Sqrt(A1 * A1 + B1 * B1))));
+                int SecondX = maxX / 2 - 10;
+                int SecondY = (int)(((A1 * (Math.Sqrt(A2 * A2 + B2 * B2)) - A2 * (Math.Sqrt(A1 * A1 + B1 * B1))) * -SecondX -
+                    C1 * (Math.Sqrt(A2 * A2 + B2 * B2) + C2 * (Math.Sqrt(A1 * A1 + B1 * B1)))) / (B1 * (Math.Sqrt(A2 * A2 + B2 * B2)) - B2 * (Math.Sqrt(A1 * A1 + B1 * B1))));
+                MessageBox.Show(FirstX.ToString() + " " + FirstY.ToString() +"; "+ SecondX.ToString() + " "+ SecondY.ToString());*/
+                int FirstX = (int)((B1 * C2 - B2 * C1) / (A1 * B2 - A2 * B1));
+                int FirstY = (int)((C1 * A2 - C2 * A1) / (A1 * B2 - A2 * B1));
+                int FirstZ;
+                if (Math.Abs(ChosenGroupOfLines[0].vector[0]) > 0.00001)
+                {
+                    FirstZ = (int)(ChosenGroupOfLines[0].A.Z + ChosenGroupOfLines[0].vector[2] * ((FirstX - ChosenGroupOfLines[0].A.X) / ChosenGroupOfLines[0].vector[0]));
+                }
+                else
+                {
+                    FirstZ = (int)(ChosenGroupOfLines[0].A.Z + ChosenGroupOfLines[0].vector[2] * ((FirstX - ChosenGroupOfLines[0].A.Y) / ChosenGroupOfLines[0].vector[1]));
+                }
+                //Поиск длины первого ребра ChosenGroupOfLines[0]
+                //Поиск дальней точки:
+                var LeftLengthA = Math.Sqrt(Math.Pow((ChosenGroupOfLines[0].A.X - FirstX), 2)+ Math.Pow((ChosenGroupOfLines[0].A.Y - FirstY), 2)+
+                    Math.Pow((ChosenGroupOfLines[0].A.Z - FirstZ), 2));
+                var LeftLengthB = Math.Sqrt(Math.Pow((ChosenGroupOfLines[0].B.X - FirstX), 2) + Math.Pow((ChosenGroupOfLines[0].B.Y - FirstY), 2) +
+                    Math.Pow((ChosenGroupOfLines[0].B.Z - FirstZ), 2));
+                Point3D MaxLeft;
+                if (LeftLengthA> LeftLengthB)
+                {
+                    MaxLeft = ChosenGroupOfLines[0].A;
+                }
+                else
+                {
+                    MaxLeft = ChosenGroupOfLines[0].B;
+                }
+                var LeftLength = Math.Max(LeftLengthA, LeftLengthB);
+                //Поиск длины второго ребра ChosenGroupOfLines[1]
+                //Поиск дальней точки:
+                var RightLengthA = Math.Sqrt(Math.Pow((ChosenGroupOfLines[1].A.X - FirstX), 2) + Math.Pow((ChosenGroupOfLines[1].A.Y - FirstY), 2) +
+                    Math.Pow((ChosenGroupOfLines[1].A.Z - FirstZ), 2));
+                var RightLengthB = Math.Sqrt(Math.Pow((ChosenGroupOfLines[1].B.X - FirstX), 2) + Math.Pow((ChosenGroupOfLines[1].B.Y - FirstY), 2) +
+                    Math.Pow((ChosenGroupOfLines[1].B.Z - FirstZ), 2));
+                Point3D MaxRight;
+                if (RightLengthA > RightLengthB)
+                {
+                    MaxRight = ChosenGroupOfLines[1].A;
+                }
+                else
+                {
+                    MaxRight = ChosenGroupOfLines[1].B;
+                }
+                var RightLength = Math.Max(RightLengthA, RightLengthB);
+                var LeftMove = LeftLength / (LeftLength + RightLength);
+                var RightMove = RightLength / (LeftLength + RightLength);
+                int SecondX = (int)(RightMove * MaxLeft.X + LeftMove * MaxRight.X);
+                int SecondY = (int)(RightMove * MaxLeft.Y + LeftMove * MaxRight.Y);
+                int SecondZ = (int)(RightMove * MaxLeft.Z + LeftMove * MaxRight.Z);
+
+                lines.Add(new Line2D(FirstX, FirstY, FirstZ, SecondX, SecondY, SecondZ));
+                DrawAllLines();
             }
+            ChosenGroupOfLines = new List<Line2D>();
         }
 
         public void DrawAllLines()
