@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Graphics_WinForm_Program
 {
+    [Serializable]
     public class Point3D
     {
         public int X, Y, Z;

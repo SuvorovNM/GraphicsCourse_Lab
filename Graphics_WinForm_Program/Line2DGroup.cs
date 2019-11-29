@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Graphics_WinForm_Program
 {
+    [Serializable]
     public class Line2DGroup
     {
         public List<Line2D> lines;

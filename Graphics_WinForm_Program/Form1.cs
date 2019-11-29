@@ -12,7 +12,7 @@ using System.Drawing.Drawing2D;
 
 namespace Graphics_WinForm_Program
 {
-    public enum action { NoAction, MoveLine, MovePointA, MovePointB, MoveLines }
+    public enum action { NoAction, MoveLine, MovePointA, MovePointB, MoveLines, Median, Height }
     public partial class frm_Main : Form
     {
         action movement;
@@ -25,6 +25,9 @@ namespace Graphics_WinForm_Program
         public List<Line2D> ChosenGroupOfLines;
         public List<Line2DGroup> ListOfGroups;
         public Line2DGroup ChosenGroup;
+        public List<Line2D> MorphingStart = new List<Line2D>();
+        public List<Line2D> MorphingFinish = new List<Line2D>();
+        public List<Line2D> MorphingGroup = new List<Line2D>();
         const double eps = 0.1;
         Point startPosition;
         public frm_Main()
@@ -42,7 +45,7 @@ namespace Graphics_WinForm_Program
             g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
             g.ScaleTransform(1, -1);
             // -- //
-            g.DrawLine(new Pen(Color.Black,1), newLine.Local_A.X, newLine.Local_A.Y, newLine.Local_B.X, newLine.Local_B.Y);
+            g.DrawLine(new Pen(Color.Black, 1), newLine.Local_A.X, newLine.Local_A.Y, newLine.Local_B.X, newLine.Local_B.Y);
             g.FillEllipse(Brushes.Black, newLine.Local_A.X - 3, newLine.Local_A.Y - 3, 6, 6);
             g.FillEllipse(Brushes.Black, newLine.Local_B.X - 3, newLine.Local_B.Y - 3, 6, 6);
             PB_Draw.Refresh();
@@ -51,21 +54,43 @@ namespace Graphics_WinForm_Program
 
         private void PB_Draw_MouseUp(object sender, MouseEventArgs e)
         {
+            if (movement == action.Median)
+            {
+                Point3D M = new Point3D((ChosenLine.A.X + ChosenLine.B.X) / 2, (ChosenLine.A.Y + ChosenLine.B.Y) / 2, (ChosenLine.A.Y + ChosenLine.B.Y) / 2);
+                lines.Add(new Line2D(CurrentX, CurrentY, 0, M.X, M.Y, M.Z));
+                DrawAllLines();
+                movement = action.NoAction;
+            }
+            else if (movement == action.Height)
+            {
+
+                movement = action.NoAction;
+            }
             if (ModifierKeys != Keys.Control && ChosenGroupOfLines.Count > 0 && CurrentLine != null)
             {
                 ChosenGroupOfLines.Clear();
                 DrawAllLines();
+                btn_Change.Enabled = false;
             }
-            if (CurrentLine != null && (ChosenLine==null || ModifierKeys == Keys.Control))
+            if (CurrentLine != null && (ChosenLine == null || ModifierKeys == Keys.Control))
             {
                 var f = new Font(Font.FontFamily, 8);
                 ChosenLine = CurrentLine;
+
                 Graphics g = Graphics.FromImage(PB_Draw.Image);
                 // -- //
-                g.DrawString(ChosenLine.Local_A.X + "; " + ChosenLine.Local_A.Y, f, Brushes.Black, new PointF(ChosenLine.Local_A.X - 3 + maxX / 2, maxY/2 - ChosenLine.Local_A.Y + 5));
+                g.DrawString(ChosenLine.Local_A.X + "; " + ChosenLine.Local_A.Y, f, Brushes.Black, new PointF(ChosenLine.Local_A.X - 3 + maxX / 2, maxY / 2 - ChosenLine.Local_A.Y + 5));
                 g.DrawString(ChosenLine.Local_B.X + "; " + ChosenLine.Local_B.Y, f, Brushes.Black, new PointF(ChosenLine.Local_B.X - 3 + maxX / 2, maxY / 2 - ChosenLine.Local_B.Y + 5));
                 g.DrawString(ChosenLine.UserEq, f, Brushes.Black, new PointF((ChosenLine.Local_B.X + maxX / 2 + ChosenLine.Local_A.X + maxX / 2) / 2, (maxY / 2 - ChosenLine.Local_B.Y + maxY / 2 - ChosenLine.Local_A.Y) / 2));
                 PB_Draw.Refresh();
+                tb1_X.Text = ChosenLine.A.X.ToString();
+                tb1_Y.Text = ChosenLine.A.Y.ToString();
+                tb1_Z.Text = ChosenLine.A.Z.ToString();
+
+                tb2_X.Text = ChosenLine.B.X.ToString();
+                tb2_Y.Text = ChosenLine.B.Y.ToString();
+                tb2_Z.Text = ChosenLine.B.Z.ToString();
+                btn_Change.Enabled = true;
             }
             else if (ChosenLine != null)//&&movement==action.NoAction
             {
@@ -84,8 +109,8 @@ namespace Graphics_WinForm_Program
                         break;
                     }
                 }
-               // if (cur!=null && !ChosenGroupOfLines.Contains(cur))
-                if (cur!=null)
+                // if (cur!=null && !ChosenGroupOfLines.Contains(cur))
+                if (cur != null)
                 {
                     ChosenGroupOfLines.Add(cur);
                     Graphics g = Graphics.FromImage(PB_Draw.Image);
@@ -95,7 +120,7 @@ namespace Graphics_WinForm_Program
                     PB_Draw.Refresh();
                 }
                 ChosenLine = cur;
-            }            
+            }
             chosenGroup();
             if (ChosenLine != null && ChosenGroup != null)
             {
@@ -110,39 +135,43 @@ namespace Graphics_WinForm_Program
             }
             if (ChosenLine == null)
             {
+                btn_Change.Enabled = false;
                 DrawAllLines();
             }
         }
 
         private void PB_Draw_MouseDown(object sender, MouseEventArgs e)
-        {            
-            movement = action.NoAction;
-            if (ChosenLine != null && ModifierKeys != Keys.Control)
+        {
+            if (movement != action.Median && movement != action.Height)
             {
-                CurrentX = e.X - maxX / 2;
-                CurrentY = maxY / 2 - e.Y;
-                if (CheckForLine(CurrentX, CurrentY, ChosenLine) && ChosenGroup== null)
+                movement = action.NoAction;
+                if (ChosenLine != null && ModifierKeys != Keys.Control)
                 {
-                    movement = action.MoveLine;
+                    CurrentX = e.X - maxX / 2;
+                    CurrentY = maxY / 2 - e.Y;
+                    if (CheckForLine(CurrentX, CurrentY, ChosenLine) && ChosenGroup == null)
+                    {
+                        movement = action.MoveLine;
+                    }
+                    if (Math.Abs(CurrentX - ChosenLine.Local_A.X) <= 3 && Math.Abs(CurrentY - ChosenLine.Local_A.Y) <= 3) // -- //
+                    {
+                        movement = action.MovePointA;
+                    }
+                    else if (Math.Abs(CurrentX - ChosenLine.Local_B.X) <= 3 && Math.Abs(CurrentY - ChosenLine.Local_B.Y) <= 3) // -- //
+                    {
+                        movement = action.MovePointB;
+                    }
+                    else if (ChosenGroup != null)//CheckForLine(CurrentX, CurrentY, ChosenLine) && 
+                    {
+                        movement = action.MoveLines;
+                    }
+                    //else 
+                    startPosition = new Point(CurrentX, CurrentY);
                 }
-                if (Math.Abs(CurrentX - ChosenLine.Local_A.X) <= 3 && Math.Abs(CurrentY - ChosenLine.Local_A.Y) <= 3) // -- //
+                if (CurrentLine == null)
                 {
-                    movement = action.MovePointA;
+                    DrawAllLines();
                 }
-                else if (Math.Abs(CurrentX - ChosenLine.Local_B.X) <= 3 && Math.Abs(CurrentY - ChosenLine.Local_B.Y) <= 3) // -- //
-                {
-                    movement = action.MovePointB;
-                }
-                else if (ChosenGroup!=null)//CheckForLine(CurrentX, CurrentY, ChosenLine) && 
-                {
-                    movement = action.MoveLines;
-                }
-                //else 
-                startPosition = new Point(CurrentX, CurrentY);
-            }
-            if (CurrentLine == null)
-            {
-                DrawAllLines();
             }
         }
 
@@ -154,7 +183,7 @@ namespace Graphics_WinForm_Program
             if (movement == action.NoAction)
             {
                 if (ChosenLine == null || ModifierKeys == Keys.Control)
-                {                    
+                {
                     Line2D cur = null;
                     for (int i = 0; i < lines.Count; i++)
                     {
@@ -164,7 +193,7 @@ namespace Graphics_WinForm_Program
                             break;
                         }
                     }
-                    if (CurrentLine != null && (!ChosenGroupOfLines.Contains(CurrentLine)) &&!(ModifierKeys == Keys.Control && cur !=null && ChosenLine == cur))
+                    if (CurrentLine != null && (!ChosenGroupOfLines.Contains(CurrentLine)) && !(ModifierKeys == Keys.Control && cur != null && ChosenLine == cur))
                     {
                         /*Graphics g = Graphics.FromImage(PB_Draw.Image);
                         g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
@@ -192,7 +221,7 @@ namespace Graphics_WinForm_Program
             {
                 switch (movement)
                 {
-                    case action.MoveLine:                        
+                    case action.MoveLine:
                         ChosenLine.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
                         startPosition.X = CurrentX;
                         startPosition.Y = CurrentY;
@@ -210,7 +239,7 @@ namespace Graphics_WinForm_Program
                         startPosition.Y = CurrentY;
                         DrawAllLines();
                         break;
-                    case action.MoveLines: // -- // Место для костыля
+                    case action.MoveLines: // -- // 
                         foreach (Line2D line2D in ChosenGroup.lines)
                         {
                             line2D.Move(CurrentX - startPosition.X, CurrentY - startPosition.Y, 0);
@@ -225,6 +254,7 @@ namespace Graphics_WinForm_Program
 
         private void frm_Main_Load(object sender, EventArgs e)
         {
+            btn_Change.Enabled = false;
             lines = new List<Line2D>();
             maxX = PB_Draw.Size.Width;
             maxY = PB_Draw.Size.Height;
@@ -290,7 +320,7 @@ namespace Graphics_WinForm_Program
                 lines.Remove(ChosenLine);
             else if (ChosenGroupOfLines.Count > 0)
             {
-                foreach(Line2D line2D in ChosenGroupOfLines)
+                foreach (Line2D line2D in ChosenGroupOfLines)
                 {
                     lines.Remove(line2D);
                 }
@@ -316,7 +346,7 @@ namespace Graphics_WinForm_Program
             Graphics g = Graphics.FromImage(PB_Draw.Image);
             g.DrawString("Y", f, Brushes.Black, new PointF(maxX / 2 + 15, 3));
 
-            g.TranslateTransform((float)maxX / 2, (float)maxY / 2);            
+            g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
             g.ScaleTransform(1, -1);
             g.DrawLine(new Pen(Color.Black, 1), maxX / 2, 0, -maxX / 2, 0);
             g.DrawLine(new Pen(Color.Black, 1), 0, maxY / 2, 0, -maxY / 2);
@@ -326,7 +356,7 @@ namespace Graphics_WinForm_Program
 
             g.DrawLine(new Pen(Color.Black, 1), 0, maxY / 2, -5, maxY / 2 - 5);
             g.DrawLine(new Pen(Color.Black, 1), 0, maxY / 2, 5, maxY / 2 - 5);
-            
+
             g.DrawString("0", f, Brushes.Black, new PointF(-9, -13));
             g.DrawString("X", f, Brushes.Black, new PointF(maxX / 2 - 12, -18));
         }
@@ -348,19 +378,19 @@ namespace Graphics_WinForm_Program
                         gr.Add(l2d);
                     }
                 }
-                foreach(Line2D l2d in tmp)
-                foreach (Line2DGroup l2dgr in ListOfGroups)
-                {
-                    if (l2dgr.lines.Contains(l2d))
+                foreach (Line2D l2d in tmp)
+                    foreach (Line2DGroup l2dgr in ListOfGroups)
+                    {
+                        if (l2dgr.lines.Contains(l2d))
                         {
-                            foreach(Line2D line2 in l2dgr.lines)
+                            foreach (Line2D line2 in l2dgr.lines)
                             {
                                 if (!ChosenGroupOfLines.Contains(line2))
                                     //ChosenGroupOfLines.Add(line2);
                                     gr.Add(line2);
                             }
                         }
-                }
+                    }
                 ChosenGroupOfLines = gr;
                 Line2DGroup lgr = new Line2DGroup(ChosenGroupOfLines);//ChosenGroupOfLines
                 ListOfGroups.Add(lgr);
@@ -377,15 +407,15 @@ namespace Graphics_WinForm_Program
         public void chosenGroup()
         {
             bool OK = false;
-            if (ListOfGroups!= null && ListOfGroups.Count>0)
-            foreach(Line2DGroup gr in ListOfGroups)
-            {
-                if (gr.lines.Contains(ChosenLine))
+            if (ListOfGroups != null && ListOfGroups.Count > 0)
+                foreach (Line2DGroup gr in ListOfGroups)
                 {
-                    ChosenGroup = gr;
-                    OK = true;
+                    if (gr.lines.Contains(ChosenLine))
+                    {
+                        ChosenGroup = gr;
+                        OK = true;
+                    }
                 }
-            }
             if (!OK) ChosenGroup = null;
         }
 
@@ -413,7 +443,7 @@ namespace Graphics_WinForm_Program
             {
                 double OK = 0;
                 //Отрицательные значения?
-                foreach(Line2D ln2d in ChosenGroup.lines)
+                foreach (Line2D ln2d in ChosenGroup.lines)
                 {
                     MakeOperation(operation, ln2d, OperationType.Change);
                 }
@@ -425,7 +455,7 @@ namespace Graphics_WinForm_Program
             }
             DrawAllLines();
         }
-        enum OperationType { Change, Show}
+        enum OperationType { Change, Show }
         private static void MakeOperation(float[,] operation, Line2D ln2d, OperationType type)
         {
             float xcoord = (((float)ln2d.A.X) * operation[0, 0] + ((float)ln2d.A.Y) * operation[1, 0] + ((float)ln2d.A.Z) * operation[2, 0] + operation[3, 0]);
@@ -523,26 +553,12 @@ namespace Graphics_WinForm_Program
             {
                 MakeOperation(operation, ln2d, OperationType.Show);
             }
-            /* if (ChosenGroup != null)
-             {
-                 double OK = 0;
-                 //Отрицательные значения?
-                 foreach (Line2D ln2d in ChosenGroup.lines)
-                 {
-                     MakeOperation(operation, ln2d, OperationType.Show);
-                 }
-             }
-             else if (ChosenLine != null)
-             {
-                 Line2D ln2d = ChosenLine;
-                 MakeOperation(operation, ln2d, OperationType.Show);
-             }*/
             DrawAllLines();
         }
 
         private void btn_Normal_Click(object sender, EventArgs e)
         {
-            foreach(Line2D line in lines)
+            foreach (Line2D line in lines)
             {
                 line.A = line.A;
                 line.B = line.B;
@@ -551,26 +567,137 @@ namespace Graphics_WinForm_Program
             DrawAllLines();
         }
 
-        public void DrawAllLines()
-        {            
+        private void btn_Change_Click(object sender, EventArgs e)
+        {
+            if (ChosenLine != null)
+            {
+                Int32.TryParse(tb1_Z.Text, out ChosenLine.A.Z);
+                Int32.TryParse(tb2_Z.Text, out ChosenLine.B.Z);
+            }
+            //DrawAllLines();
+        }
+
+        private void sAVEASToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "MyGraphic files (*.mgr)|*.mgr";
+            if (sfd.ShowDialog() == DialogResult.OK)
+                try
+                {
+                    BinSerializer.Serialize(sfd.FileName, lines, ListOfGroups);
+                    MessageBox.Show("Успешно сохранено!");
+                }
+                catch
+                {
+
+                }
+
+        }
+
+        private void lOADToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "MyGraphic files (*.mgr)|*.mgr";
+            if (ofd.ShowDialog() == DialogResult.OK)
+                try
+                {
+                    BinSerializer.Deserialize(ofd.FileName, ref lines, ref ListOfGroups);
+                    MessageBox.Show("Файл успешно загружен!");
+                    DrawAllLines();
+                }
+                catch { }
+        }
+
+        private void tb_Morphing_Scroll(object sender, EventArgs e)
+        //Предположим, что ListOfGroups содержит только дом и 2 группы
+        //Первая группа - ListOfGroups[1] => MorphingStart
+        //Вторая группа - ListOfGroups[2] => MorphingFinish
+        {
+            //MorphingGroup = new List<Line2D>();
+            if (MorphingStart != null && MorphingStart.Count > 0 && MorphingFinish != null && MorphingFinish.Count == MorphingStart.Count)
+            {
+                float MorphingParam = (float)tb_Morphing.Value / 10;
+                List<Line2D> firstFigure = MorphingStart;
+                List<Line2D> secondFigure = MorphingFinish;
+                List<Line2D> newFigure = new List<Line2D>();
+                for (int i = 0; i < firstFigure.Count; i++)
+                {
+                    int Ax = (int)(firstFigure[i].A.X * (1 - MorphingParam) + secondFigure[i].A.X * MorphingParam);
+                    int Ay = (int)(firstFigure[i].A.Y * (1 - MorphingParam) + secondFigure[i].A.Y * MorphingParam);
+                    int Az = (int)(firstFigure[i].A.Z * (1 - MorphingParam) + secondFigure[i].A.Z * MorphingParam);
+
+                    int Bx = (int)(firstFigure[i].B.X * (1 - MorphingParam) + secondFigure[i].B.X * MorphingParam);
+                    int By = (int)(firstFigure[i].B.Y * (1 - MorphingParam) + secondFigure[i].B.Y * MorphingParam);
+                    int Bz = (int)(firstFigure[i].B.Z * (1 - MorphingParam) + secondFigure[i].B.Z * MorphingParam);
+
+                    Line2D newline = new Line2D(Ax, Ay, Az, Bx, By, Bz);
+                    newFigure.Add(newline);
+                }
+                MorphingGroup = newFigure;
+                DrawAllLines();
+                DrawMorph();
+            }
+
+        }
+
+        public void DrawMorph()
+        {
             Graphics g = Graphics.FromImage(PB_Draw.Image);
             g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
             g.ScaleTransform(1, -1);
-            //Graphics g = Graphics.FromImage(PB_Draw.Image);
-            g.Clear(Color.White);
-            ShowAxes();
-            foreach (Line2D line2D in lines)
+            foreach (Line2D line2D in MorphingGroup)
             {
-                /*g.DrawLine(new Pen(Color.Black, 1), line2D.A.X, line2D.A.Y, line2D.B.X, line2D.B.Y);
-                g.FillEllipse(Brushes.Black, line2D.A.X - 3, line2D.A.Y - 3, 6, 6);               
-                g.FillEllipse(Brushes.Black, line2D.B.X-3, line2D.B.Y-3, 6, 6);*/
                 g.DrawLine(new Pen(Color.Black, 1), line2D.Local_A.X, line2D.Local_A.Y, line2D.Local_B.X, line2D.Local_B.Y);
                 g.FillEllipse(Brushes.Black, line2D.Local_A.X - 3, line2D.Local_A.Y - 3, 6, 6);
                 g.FillEllipse(Brushes.Black, line2D.Local_B.X - 3, line2D.Local_B.Y - 3, 6, 6);
             }
-            //PB_Draw.Invalidate();
             PB_Draw.Refresh();
-            //PBDraw.Invalidate();
+        }
+
+        private void btn_StartPos_Click(object sender, EventArgs e)
+        {
+            if (ChosenGroup != null)
+            {
+                MorphingStart = ChosenGroup.lines;
+            }
+        }
+
+        private void btn_SecondPos_Click(object sender, EventArgs e)
+        {
+            if (ChosenGroup != null)
+            {
+                MorphingFinish = ChosenGroup.lines;
+            }
+        }
+
+        private void medianToolStripMenuItem_Click(object sender, EventArgs e)
+        //Ожидается, что линия уже выбрана
+        //Остается выбрать точку
+        {
+            if (ChosenLine != null)
+                movement = action.Median;
+        }
+
+        private void tsm_Height_Click(object sender, EventArgs e)
+        {
+            if (ChosenLine != null)
+                movement = action.Height;
+        }
+
+        public void DrawAllLines()
+        {
+            Graphics g = Graphics.FromImage(PB_Draw.Image);
+            g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
+            g.ScaleTransform(1, -1);
+            g.Clear(Color.White);
+            ShowAxes();
+            foreach (Line2D line2D in lines)
+            {
+                g.DrawLine(new Pen(Color.Black, 1), line2D.Local_A.X, line2D.Local_A.Y, line2D.Local_B.X, line2D.Local_B.Y);
+                g.FillEllipse(Brushes.Black, line2D.Local_A.X - 3, line2D.Local_A.Y - 3, 6, 6);
+                g.FillEllipse(Brushes.Black, line2D.Local_B.X - 3, line2D.Local_B.Y - 3, 6, 6);
+            }
+            PB_Draw.Refresh();
         }
         public bool CheckForLine(int CurrentX, int CurrentY, Line2D line)
         {/*

@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 namespace Graphics_WinForm_Program
 {
     public enum position { normal,vertical,horizontal}
+    [Serializable]
     public class Line2D
     {
         public Point3D Local_A, Local_B;

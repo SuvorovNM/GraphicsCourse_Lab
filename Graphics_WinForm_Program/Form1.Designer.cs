@@ -57,13 +57,43 @@
             this.SB_Z = new System.Windows.Forms.HScrollBar();
             this.btn_Show = new System.Windows.Forms.Button();
             this.btn_Normal = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tb1_X = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tb1_Y = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tb1_Z = new System.Windows.Forms.TextBox();
+            this.tb2_Z = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.tb2_Y = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.tb2_X = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.btn_Change = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.lOADToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sAVEASToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tb_Morphing = new System.Windows.Forms.TrackBar();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.btn_StartPos = new System.Windows.Forms.Button();
+            this.btn_SecondPos = new System.Windows.Forms.Button();
+            this.createSpecialLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsm_Median = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsm_Height = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsm_Bisection = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Massive)).BeginInit();
+            this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_Morphing)).BeginInit();
             this.SuspendLayout();
             // 
             // PB_Draw
             // 
-            this.PB_Draw.Location = new System.Drawing.Point(1, 1);
+            this.PB_Draw.Location = new System.Drawing.Point(2, 34);
             this.PB_Draw.Name = "PB_Draw";
             this.PB_Draw.Size = new System.Drawing.Size(650, 450);
             this.PB_Draw.TabIndex = 0;
@@ -75,7 +105,7 @@
             // 
             // btn_CreateLine
             // 
-            this.btn_CreateLine.Location = new System.Drawing.Point(656, 12);
+            this.btn_CreateLine.Location = new System.Drawing.Point(657, 45);
             this.btn_CreateLine.Name = "btn_CreateLine";
             this.btn_CreateLine.Size = new System.Drawing.Size(132, 22);
             this.btn_CreateLine.TabIndex = 1;
@@ -85,7 +115,7 @@
             // 
             // btn_DeleteLine
             // 
-            this.btn_DeleteLine.Location = new System.Drawing.Point(656, 41);
+            this.btn_DeleteLine.Location = new System.Drawing.Point(657, 74);
             this.btn_DeleteLine.Name = "btn_DeleteLine";
             this.btn_DeleteLine.Size = new System.Drawing.Size(132, 23);
             this.btn_DeleteLine.TabIndex = 2;
@@ -95,7 +125,7 @@
             // 
             // TB_Mouse_Coordinates
             // 
-            this.TB_Mouse_Coordinates.Location = new System.Drawing.Point(2, 455);
+            this.TB_Mouse_Coordinates.Location = new System.Drawing.Point(12, 496);
             this.TB_Mouse_Coordinates.Name = "TB_Mouse_Coordinates";
             this.TB_Mouse_Coordinates.ReadOnly = true;
             this.TB_Mouse_Coordinates.Size = new System.Drawing.Size(131, 20);
@@ -103,7 +133,7 @@
             // 
             // btn_Group
             // 
-            this.btn_Group.Location = new System.Drawing.Point(657, 70);
+            this.btn_Group.Location = new System.Drawing.Point(658, 103);
             this.btn_Group.Name = "btn_Group";
             this.btn_Group.Size = new System.Drawing.Size(131, 23);
             this.btn_Group.TabIndex = 4;
@@ -113,7 +143,7 @@
             // 
             // btn_Ungroup
             // 
-            this.btn_Ungroup.Location = new System.Drawing.Point(657, 99);
+            this.btn_Ungroup.Location = new System.Drawing.Point(658, 132);
             this.btn_Ungroup.Name = "btn_Ungroup";
             this.btn_Ungroup.Size = new System.Drawing.Size(131, 23);
             this.btn_Ungroup.TabIndex = 5;
@@ -131,7 +161,7 @@
             this.clm_Y,
             this.clm_Z,
             this.clm_OK});
-            this.dgv_Massive.Location = new System.Drawing.Point(658, 129);
+            this.dgv_Massive.Location = new System.Drawing.Point(659, 162);
             this.dgv_Massive.MultiSelect = false;
             this.dgv_Massive.Name = "dgv_Massive";
             this.dgv_Massive.Size = new System.Drawing.Size(390, 150);
@@ -159,7 +189,7 @@
             // 
             // btn_Exec
             // 
-            this.btn_Exec.Location = new System.Drawing.Point(916, 294);
+            this.btn_Exec.Location = new System.Drawing.Point(917, 327);
             this.btn_Exec.Name = "btn_Exec";
             this.btn_Exec.Size = new System.Drawing.Size(132, 22);
             this.btn_Exec.TabIndex = 7;
@@ -169,7 +199,7 @@
             // 
             // SB_Fi
             // 
-            this.SB_Fi.Location = new System.Drawing.Point(658, 299);
+            this.SB_Fi.Location = new System.Drawing.Point(659, 332);
             this.SB_Fi.Maximum = 72;
             this.SB_Fi.Name = "SB_Fi";
             this.SB_Fi.Size = new System.Drawing.Size(118, 17);
@@ -179,7 +209,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(657, 316);
+            this.label1.Location = new System.Drawing.Point(658, 349);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(13, 13);
             this.label1.TabIndex = 10;
@@ -188,7 +218,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(763, 316);
+            this.label2.Location = new System.Drawing.Point(764, 349);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(21, 13);
             this.label2.TabIndex = 11;
@@ -197,7 +227,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(660, 283);
+            this.label3.Location = new System.Drawing.Point(661, 316);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 13);
             this.label3.TabIndex = 12;
@@ -206,7 +236,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(660, 332);
+            this.label4.Location = new System.Drawing.Point(661, 365);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(36, 13);
             this.label4.TabIndex = 16;
@@ -216,7 +246,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(763, 365);
+            this.label5.Location = new System.Drawing.Point(764, 398);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(21, 13);
             this.label5.TabIndex = 15;
@@ -226,7 +256,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(657, 365);
+            this.label6.Location = new System.Drawing.Point(658, 398);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(13, 13);
             this.label6.TabIndex = 14;
@@ -235,7 +265,7 @@
             // 
             // SB_Tetta
             // 
-            this.SB_Tetta.Location = new System.Drawing.Point(658, 348);
+            this.SB_Tetta.Location = new System.Drawing.Point(659, 381);
             this.SB_Tetta.Maximum = 72;
             this.SB_Tetta.Name = "SB_Tetta";
             this.SB_Tetta.Size = new System.Drawing.Size(118, 17);
@@ -244,7 +274,7 @@
             // 
             // tb_Fi
             // 
-            this.tb_Fi.Location = new System.Drawing.Point(785, 299);
+            this.tb_Fi.Location = new System.Drawing.Point(786, 332);
             this.tb_Fi.Name = "tb_Fi";
             this.tb_Fi.ReadOnly = true;
             this.tb_Fi.Size = new System.Drawing.Size(44, 20);
@@ -252,7 +282,7 @@
             // 
             // tb_Tetta
             // 
-            this.tb_Tetta.Location = new System.Drawing.Point(785, 348);
+            this.tb_Tetta.Location = new System.Drawing.Point(786, 381);
             this.tb_Tetta.Name = "tb_Tetta";
             this.tb_Tetta.ReadOnly = true;
             this.tb_Tetta.Size = new System.Drawing.Size(44, 20);
@@ -260,7 +290,7 @@
             // 
             // tb_Z
             // 
-            this.tb_Z.Location = new System.Drawing.Point(785, 397);
+            this.tb_Z.Location = new System.Drawing.Point(786, 430);
             this.tb_Z.Name = "tb_Z";
             this.tb_Z.ReadOnly = true;
             this.tb_Z.Size = new System.Drawing.Size(44, 20);
@@ -269,7 +299,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(660, 381);
+            this.label7.Location = new System.Drawing.Point(661, 414);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(46, 13);
             this.label7.TabIndex = 22;
@@ -279,7 +309,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(763, 414);
+            this.label8.Location = new System.Drawing.Point(764, 447);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(25, 13);
             this.label8.TabIndex = 21;
@@ -288,7 +318,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(660, 414);
+            this.label9.Location = new System.Drawing.Point(661, 447);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(19, 13);
             this.label9.TabIndex = 20;
@@ -296,7 +326,7 @@
             // 
             // SB_Z
             // 
-            this.SB_Z.Location = new System.Drawing.Point(658, 397);
+            this.SB_Z.Location = new System.Drawing.Point(659, 430);
             this.SB_Z.Maximum = 400;
             this.SB_Z.Minimum = 50;
             this.SB_Z.Name = "SB_Z";
@@ -307,7 +337,7 @@
             // 
             // btn_Show
             // 
-            this.btn_Show.Location = new System.Drawing.Point(754, 430);
+            this.btn_Show.Location = new System.Drawing.Point(755, 463);
             this.btn_Show.Name = "btn_Show";
             this.btn_Show.Size = new System.Drawing.Size(75, 23);
             this.btn_Show.TabIndex = 24;
@@ -317,7 +347,7 @@
             // 
             // btn_Normal
             // 
-            this.btn_Normal.Location = new System.Drawing.Point(850, 346);
+            this.btn_Normal.Location = new System.Drawing.Point(851, 379);
             this.btn_Normal.Name = "btn_Normal";
             this.btn_Normal.Size = new System.Drawing.Size(75, 23);
             this.btn_Normal.TabIndex = 25;
@@ -325,11 +355,271 @@
             this.btn_Normal.UseVisualStyleBackColor = true;
             this.btn_Normal.Click += new System.EventHandler(this.btn_Normal_Click);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(807, 45);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(44, 13);
+            this.label10.TabIndex = 26;
+            this.label10.Text = "1 точка";
+            // 
+            // tb1_X
+            // 
+            this.tb1_X.Location = new System.Drawing.Point(810, 62);
+            this.tb1_X.Name = "tb1_X";
+            this.tb1_X.ReadOnly = true;
+            this.tb1_X.Size = new System.Drawing.Size(41, 20);
+            this.tb1_X.TabIndex = 27;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(795, 65);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(14, 13);
+            this.label11.TabIndex = 28;
+            this.label11.Text = "X";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(855, 65);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(14, 13);
+            this.label12.TabIndex = 30;
+            this.label12.Text = "Y";
+            // 
+            // tb1_Y
+            // 
+            this.tb1_Y.Location = new System.Drawing.Point(870, 62);
+            this.tb1_Y.Name = "tb1_Y";
+            this.tb1_Y.ReadOnly = true;
+            this.tb1_Y.Size = new System.Drawing.Size(41, 20);
+            this.tb1_Y.TabIndex = 29;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(917, 65);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(14, 13);
+            this.label13.TabIndex = 31;
+            this.label13.Text = "Z";
+            // 
+            // tb1_Z
+            // 
+            this.tb1_Z.Location = new System.Drawing.Point(937, 62);
+            this.tb1_Z.Name = "tb1_Z";
+            this.tb1_Z.Size = new System.Drawing.Size(54, 20);
+            this.tb1_Z.TabIndex = 32;
+            // 
+            // tb2_Z
+            // 
+            this.tb2_Z.Location = new System.Drawing.Point(937, 106);
+            this.tb2_Z.Name = "tb2_Z";
+            this.tb2_Z.Size = new System.Drawing.Size(54, 20);
+            this.tb2_Z.TabIndex = 39;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(917, 109);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(14, 13);
+            this.label14.TabIndex = 38;
+            this.label14.Text = "Z";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(855, 109);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(14, 13);
+            this.label15.TabIndex = 37;
+            this.label15.Text = "Y";
+            // 
+            // tb2_Y
+            // 
+            this.tb2_Y.Location = new System.Drawing.Point(870, 106);
+            this.tb2_Y.Name = "tb2_Y";
+            this.tb2_Y.ReadOnly = true;
+            this.tb2_Y.Size = new System.Drawing.Size(41, 20);
+            this.tb2_Y.TabIndex = 36;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(795, 109);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(14, 13);
+            this.label16.TabIndex = 35;
+            this.label16.Text = "X";
+            // 
+            // tb2_X
+            // 
+            this.tb2_X.Location = new System.Drawing.Point(810, 106);
+            this.tb2_X.Name = "tb2_X";
+            this.tb2_X.ReadOnly = true;
+            this.tb2_X.Size = new System.Drawing.Size(41, 20);
+            this.tb2_X.TabIndex = 34;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(807, 89);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(44, 13);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "2 точка";
+            // 
+            // btn_Change
+            // 
+            this.btn_Change.Location = new System.Drawing.Point(998, 79);
+            this.btn_Change.Name = "btn_Change";
+            this.btn_Change.Size = new System.Drawing.Size(54, 23);
+            this.btn_Change.TabIndex = 40;
+            this.btn_Change.Text = "Update";
+            this.btn_Change.UseVisualStyleBackColor = true;
+            this.btn_Change.Click += new System.EventHandler(this.btn_Change_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lOADToolStripMenuItem,
+            this.sAVEASToolStripMenuItem,
+            this.createSpecialLineToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1063, 24);
+            this.menuStrip1.TabIndex = 41;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // lOADToolStripMenuItem
+            // 
+            this.lOADToolStripMenuItem.Name = "lOADToolStripMenuItem";
+            this.lOADToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.lOADToolStripMenuItem.Text = "LOAD";
+            this.lOADToolStripMenuItem.Click += new System.EventHandler(this.lOADToolStripMenuItem_Click);
+            // 
+            // sAVEASToolStripMenuItem
+            // 
+            this.sAVEASToolStripMenuItem.Name = "sAVEASToolStripMenuItem";
+            this.sAVEASToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.sAVEASToolStripMenuItem.Text = "SAVE AS...";
+            this.sAVEASToolStripMenuItem.Click += new System.EventHandler(this.sAVEASToolStripMenuItem_Click);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(671, 501);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(53, 13);
+            this.label18.TabIndex = 42;
+            this.label18.Text = "Морфинг";
+            // 
+            // tb_Morphing
+            // 
+            this.tb_Morphing.Location = new System.Drawing.Point(740, 494);
+            this.tb_Morphing.Name = "tb_Morphing";
+            this.tb_Morphing.Size = new System.Drawing.Size(222, 45);
+            this.tb_Morphing.TabIndex = 43;
+            this.tb_Morphing.Scroll += new System.EventHandler(this.tb_Morphing_Scroll);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(747, 526);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(13, 13);
+            this.label19.TabIndex = 44;
+            this.label19.Text = "0";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(943, 526);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(13, 13);
+            this.label20.TabIndex = 45;
+            this.label20.Text = "1";
+            // 
+            // btn_StartPos
+            // 
+            this.btn_StartPos.Location = new System.Drawing.Point(524, 501);
+            this.btn_StartPos.Name = "btn_StartPos";
+            this.btn_StartPos.Size = new System.Drawing.Size(128, 23);
+            this.btn_StartPos.TabIndex = 46;
+            this.btn_StartPos.Text = "Первая фигура";
+            this.btn_StartPos.UseVisualStyleBackColor = true;
+            this.btn_StartPos.Click += new System.EventHandler(this.btn_StartPos_Click);
+            // 
+            // btn_SecondPos
+            // 
+            this.btn_SecondPos.Location = new System.Drawing.Point(524, 530);
+            this.btn_SecondPos.Name = "btn_SecondPos";
+            this.btn_SecondPos.Size = new System.Drawing.Size(128, 23);
+            this.btn_SecondPos.TabIndex = 47;
+            this.btn_SecondPos.Text = "Вторая фигура";
+            this.btn_SecondPos.UseVisualStyleBackColor = true;
+            this.btn_SecondPos.Click += new System.EventHandler(this.btn_SecondPos_Click);
+            // 
+            // createSpecialLineToolStripMenuItem
+            // 
+            this.createSpecialLineToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsm_Median,
+            this.tsm_Height,
+            this.tsm_Bisection});
+            this.createSpecialLineToolStripMenuItem.Name = "createSpecialLineToolStripMenuItem";
+            this.createSpecialLineToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.createSpecialLineToolStripMenuItem.Text = "Create Special Line";
+            // 
+            // tsm_Median
+            // 
+            this.tsm_Median.Name = "tsm_Median";
+            this.tsm_Median.Size = new System.Drawing.Size(180, 22);
+            this.tsm_Median.Text = "Median";
+            this.tsm_Median.Click += new System.EventHandler(this.medianToolStripMenuItem_Click);
+            // 
+            // tsm_Height
+            // 
+            this.tsm_Height.Name = "tsm_Height";
+            this.tsm_Height.Size = new System.Drawing.Size(180, 22);
+            this.tsm_Height.Text = "Height";
+            this.tsm_Height.Click += new System.EventHandler(this.tsm_Height_Click);
+            // 
+            // tsm_Bisection
+            // 
+            this.tsm_Bisection.Name = "tsm_Bisection";
+            this.tsm_Bisection.Size = new System.Drawing.Size(180, 22);
+            this.tsm_Bisection.Text = "Bisection";
+            // 
             // frm_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 477);
+            this.ClientSize = new System.Drawing.Size(1063, 583);
+            this.Controls.Add(this.btn_SecondPos);
+            this.Controls.Add(this.btn_StartPos);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.tb_Morphing);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.btn_Change);
+            this.Controls.Add(this.tb2_Z);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.tb2_Y);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.tb2_X);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.tb1_Z);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.tb1_Y);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.tb1_X);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.btn_Normal);
             this.Controls.Add(this.btn_Show);
             this.Controls.Add(this.tb_Z);
@@ -355,11 +645,16 @@
             this.Controls.Add(this.btn_DeleteLine);
             this.Controls.Add(this.btn_CreateLine);
             this.Controls.Add(this.PB_Draw);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "frm_Main";
             this.Text = "Graphics Project";
             this.Load += new System.EventHandler(this.frm_Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Massive)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_Morphing)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -396,6 +691,34 @@
         private System.Windows.Forms.HScrollBar SB_Z;
         private System.Windows.Forms.Button btn_Show;
         private System.Windows.Forms.Button btn_Normal;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox tb1_X;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox tb1_Y;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox tb1_Z;
+        private System.Windows.Forms.TextBox tb2_Z;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox tb2_Y;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox tb2_X;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button btn_Change;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem lOADToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sAVEASToolStripMenuItem;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TrackBar tb_Morphing;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Button btn_StartPos;
+        private System.Windows.Forms.Button btn_SecondPos;
+        private System.Windows.Forms.ToolStripMenuItem createSpecialLineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsm_Median;
+        private System.Windows.Forms.ToolStripMenuItem tsm_Height;
+        private System.Windows.Forms.ToolStripMenuItem tsm_Bisection;
     }
 }
 
