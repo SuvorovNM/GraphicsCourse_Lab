@@ -29,7 +29,7 @@ namespace Graphics_WinForm_Program
         public List<Line2D> MorphingFinish = new List<Line2D>();
         public List<Line2D> MorphingGroup = new List<Line2D>();
         const double eps = 0.1;
-        public int LocalX, LocalY;
+        public int LocalX, LocalY, LocalZ;
         Point startPosition;
         public frm_Main()
         {
@@ -802,14 +802,37 @@ namespace Graphics_WinForm_Program
         {
             if (!string.IsNullOrEmpty(tb_xloc.Text) && !string.IsNullOrEmpty(tb_yloc.Text))
             {
-                int xloc=-800, yloc=-800;
+                int xloc = 0, yloc = 0, zloc = 0;
                 Int32.TryParse(tb_xloc.Text, out xloc);
                 Int32.TryParse(tb_yloc.Text, out yloc);
-                if (xloc!=-800 && yloc != -800)
+                Int32.TryParse(tb_zloc.Text, out zloc);
+                if (xloc!=0 && yloc != 0 && zloc != 0)
                 {
                     LocalX = xloc;
                     LocalY = yloc;
+                    LocalZ = zloc;
+                    lb_Local.ForeColor = Color.Green;
+                    lb_Local.Text = "Local Chosen";
+                    btn_LocalEx.Enabled = true;
                 }
+                else
+                {
+                    LocalX = 0;
+                    LocalY = 0;
+                    LocalZ = 0;
+                    lb_Local.ForeColor = Color.Red;
+                    lb_Local.Text = "Local Not Chosen";
+                    btn_LocalEx.Enabled = false;
+                }
+            }
+            else
+            {
+                LocalX = 0;
+                LocalY = 0;
+                LocalZ = 0;
+                lb_Local.ForeColor = Color.Red;
+                lb_Local.Text = "Local Not Chosen";
+                btn_LocalEx.Enabled = false;
             }
         }
 
@@ -843,13 +866,11 @@ namespace Graphics_WinForm_Program
                     ln2d.B.X -= LocalX;
                     ln2d.A.Y -= LocalY;
                     ln2d.B.Y -= LocalY;
+                    ln2d.A.Z -= LocalZ;
+                    ln2d.B.Z -= LocalZ;
                     MakeOperation(operation, ln2d, OperationType.Change);
-                    ln2d.A = new Point3D(ln2d.A.X + LocalX, ln2d.A.Y + LocalY, ln2d.A.Z);
-                    ln2d.B = new Point3D(ln2d.B.X + LocalX, ln2d.B.Y + LocalY, ln2d.B.Z);
-                    //ln2d.A.X += LocalX;
-                    //ln2d.B.X += LocalX;
-                    //ln2d.A.Y += LocalY;
-                    //ln2d.B.Y += LocalY;
+                    ln2d.A = new Point3D(ln2d.A.X + LocalX, ln2d.A.Y + LocalY, ln2d.A.Z + LocalZ);
+                    ln2d.B = new Point3D(ln2d.B.X + LocalX, ln2d.B.Y + LocalY, ln2d.B.Z + LocalZ);
                     ln2d.FindParams();
                 }
             }

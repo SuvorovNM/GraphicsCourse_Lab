@@ -95,6 +95,7 @@
             this.tb_xloc = new System.Windows.Forms.TextBox();
             this.tb_zloc = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
+            this.lb_Local = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Massive)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -626,6 +627,7 @@
             // 
             // btn_LocalEx
             // 
+            this.btn_LocalEx.Enabled = false;
             this.btn_LocalEx.Location = new System.Drawing.Point(914, 344);
             this.btn_LocalEx.Name = "btn_LocalEx";
             this.btn_LocalEx.Size = new System.Drawing.Size(132, 23);
@@ -656,6 +658,7 @@
             // tb_yloc
             // 
             this.tb_yloc.Location = new System.Drawing.Point(253, 522);
+            this.tb_yloc.MaxLength = 4;
             this.tb_yloc.Name = "tb_yloc";
             this.tb_yloc.Size = new System.Drawing.Size(41, 20);
             this.tb_yloc.TabIndex = 53;
@@ -672,6 +675,7 @@
             // tb_xloc
             // 
             this.tb_xloc.Location = new System.Drawing.Point(193, 522);
+            this.tb_xloc.MaxLength = 4;
             this.tb_xloc.Name = "tb_xloc";
             this.tb_xloc.Size = new System.Drawing.Size(41, 20);
             this.tb_xloc.TabIndex = 51;
@@ -679,6 +683,7 @@
             // tb_zloc
             // 
             this.tb_zloc.Location = new System.Drawing.Point(317, 522);
+            this.tb_zloc.MaxLength = 5;
             this.tb_zloc.Name = "tb_zloc";
             this.tb_zloc.Size = new System.Drawing.Size(42, 20);
             this.tb_zloc.TabIndex = 56;
@@ -692,11 +697,22 @@
             this.label21.TabIndex = 55;
             this.label21.Text = "Z";
             // 
+            // lb_Local
+            // 
+            this.lb_Local.AutoSize = true;
+            this.lb_Local.ForeColor = System.Drawing.Color.Red;
+            this.lb_Local.Location = new System.Drawing.Point(346, 553);
+            this.lb_Local.Name = "lb_Local";
+            this.lb_Local.Size = new System.Drawing.Size(92, 13);
+            this.lb_Local.TabIndex = 57;
+            this.lb_Local.Text = "Local Not Chosen";
+            // 
             // frm_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 583);
+            this.Controls.Add(this.lb_Local);
             this.Controls.Add(this.tb_zloc);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.label22);
@@ -836,6 +852,7 @@
         private System.Windows.Forms.TextBox tb_xloc;
         private System.Windows.Forms.TextBox tb_zloc;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label lb_Local;
     }
 }
 
