@@ -45,7 +45,7 @@ namespace Graphics_WinForm_Program
             vector[2] = B.Z - A.Z;
             equation[0] = Local_A.Y - Local_B.Y;
             equation[1] = Local_B.X - Local_A.X;
-            equation[2] = Local_A.X * B.Y - Local_B.X * A.Y;
+            equation[2] = Local_A.X * Local_B.Y - Local_B.X * Local_A.Y;
             double checkForResult = 0;
             UserEq = "x = " + A.X + " + t*" + vector[0] + "; y = " + A.Y + " + t*" + vector[1] + "; z = " + A.Z + " + t*" + vector[2];
 

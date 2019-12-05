@@ -75,16 +75,26 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.lOADToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sAVEASToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createSpecialLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsm_Median = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsm_Height = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsm_Bisection = new System.Windows.Forms.ToolStripMenuItem();
             this.label18 = new System.Windows.Forms.Label();
             this.tb_Morphing = new System.Windows.Forms.TrackBar();
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.btn_StartPos = new System.Windows.Forms.Button();
             this.btn_SecondPos = new System.Windows.Forms.Button();
-            this.createSpecialLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsm_Median = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsm_Height = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsm_Bisection = new System.Windows.Forms.ToolStripMenuItem();
+            this.nEWToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CB_Axes = new System.Windows.Forms.CheckBox();
+            this.btn_LocalEx = new System.Windows.Forms.Button();
+            this.btn_ChooseLocal = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
+            this.tb_yloc = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.tb_xloc = new System.Windows.Forms.TextBox();
+            this.tb_zloc = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Draw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Massive)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -189,7 +199,7 @@
             // 
             // btn_Exec
             // 
-            this.btn_Exec.Location = new System.Drawing.Point(917, 327);
+            this.btn_Exec.Location = new System.Drawing.Point(914, 318);
             this.btn_Exec.Name = "btn_Exec";
             this.btn_Exec.Size = new System.Drawing.Size(132, 22);
             this.btn_Exec.TabIndex = 7;
@@ -486,6 +496,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nEWToolStripMenuItem,
             this.lOADToolStripMenuItem,
             this.sAVEASToolStripMenuItem,
             this.createSpecialLineToolStripMenuItem});
@@ -508,6 +519,37 @@
             this.sAVEASToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.sAVEASToolStripMenuItem.Text = "SAVE AS...";
             this.sAVEASToolStripMenuItem.Click += new System.EventHandler(this.sAVEASToolStripMenuItem_Click);
+            // 
+            // createSpecialLineToolStripMenuItem
+            // 
+            this.createSpecialLineToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsm_Median,
+            this.tsm_Height,
+            this.tsm_Bisection});
+            this.createSpecialLineToolStripMenuItem.Name = "createSpecialLineToolStripMenuItem";
+            this.createSpecialLineToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.createSpecialLineToolStripMenuItem.Text = "Create Special Line";
+            // 
+            // tsm_Median
+            // 
+            this.tsm_Median.Name = "tsm_Median";
+            this.tsm_Median.Size = new System.Drawing.Size(122, 22);
+            this.tsm_Median.Text = "Median";
+            this.tsm_Median.Click += new System.EventHandler(this.medianToolStripMenuItem_Click);
+            // 
+            // tsm_Height
+            // 
+            this.tsm_Height.Name = "tsm_Height";
+            this.tsm_Height.Size = new System.Drawing.Size(122, 22);
+            this.tsm_Height.Text = "Height";
+            this.tsm_Height.Click += new System.EventHandler(this.tsm_Height_Click);
+            // 
+            // tsm_Bisection
+            // 
+            this.tsm_Bisection.Name = "tsm_Bisection";
+            this.tsm_Bisection.Size = new System.Drawing.Size(122, 22);
+            this.tsm_Bisection.Text = "Bisection";
+            this.tsm_Bisection.Click += new System.EventHandler(this.tsm_Bisection_Click);
             // 
             // label18
             // 
@@ -550,7 +592,7 @@
             this.btn_StartPos.Name = "btn_StartPos";
             this.btn_StartPos.Size = new System.Drawing.Size(128, 23);
             this.btn_StartPos.TabIndex = 46;
-            this.btn_StartPos.Text = "Первая фигура";
+            this.btn_StartPos.Text = "First Figure";
             this.btn_StartPos.UseVisualStyleBackColor = true;
             this.btn_StartPos.Click += new System.EventHandler(this.btn_StartPos_Click);
             // 
@@ -560,46 +602,110 @@
             this.btn_SecondPos.Name = "btn_SecondPos";
             this.btn_SecondPos.Size = new System.Drawing.Size(128, 23);
             this.btn_SecondPos.TabIndex = 47;
-            this.btn_SecondPos.Text = "Вторая фигура";
+            this.btn_SecondPos.Text = "Second Figure";
             this.btn_SecondPos.UseVisualStyleBackColor = true;
             this.btn_SecondPos.Click += new System.EventHandler(this.btn_SecondPos_Click);
             // 
-            // createSpecialLineToolStripMenuItem
+            // nEWToolStripMenuItem
             // 
-            this.createSpecialLineToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsm_Median,
-            this.tsm_Height,
-            this.tsm_Bisection});
-            this.createSpecialLineToolStripMenuItem.Name = "createSpecialLineToolStripMenuItem";
-            this.createSpecialLineToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
-            this.createSpecialLineToolStripMenuItem.Text = "Create Special Line";
+            this.nEWToolStripMenuItem.Name = "nEWToolStripMenuItem";
+            this.nEWToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.nEWToolStripMenuItem.Text = "NEW";
+            this.nEWToolStripMenuItem.Click += new System.EventHandler(this.nEWToolStripMenuItem_Click);
             // 
-            // tsm_Median
+            // CB_Axes
             // 
-            this.tsm_Median.Name = "tsm_Median";
-            this.tsm_Median.Size = new System.Drawing.Size(180, 22);
-            this.tsm_Median.Text = "Median";
-            this.tsm_Median.Click += new System.EventHandler(this.medianToolStripMenuItem_Click);
+            this.CB_Axes.AutoSize = true;
+            this.CB_Axes.Location = new System.Drawing.Point(150, 498);
+            this.CB_Axes.Name = "CB_Axes";
+            this.CB_Axes.Size = new System.Drawing.Size(46, 17);
+            this.CB_Axes.TabIndex = 48;
+            this.CB_Axes.Text = "Оси";
+            this.CB_Axes.UseVisualStyleBackColor = true;
+            this.CB_Axes.CheckedChanged += new System.EventHandler(this.CB_Axes_CheckedChanged);
             // 
-            // tsm_Height
+            // btn_LocalEx
             // 
-            this.tsm_Height.Name = "tsm_Height";
-            this.tsm_Height.Size = new System.Drawing.Size(180, 22);
-            this.tsm_Height.Text = "Height";
-            this.tsm_Height.Click += new System.EventHandler(this.tsm_Height_Click);
+            this.btn_LocalEx.Location = new System.Drawing.Point(914, 344);
+            this.btn_LocalEx.Name = "btn_LocalEx";
+            this.btn_LocalEx.Size = new System.Drawing.Size(132, 23);
+            this.btn_LocalEx.TabIndex = 49;
+            this.btn_LocalEx.Text = "Execute Local";
+            this.btn_LocalEx.UseVisualStyleBackColor = true;
+            this.btn_LocalEx.Click += new System.EventHandler(this.btn_LocalEx_Click);
             // 
-            // tsm_Bisection
+            // btn_ChooseLocal
             // 
-            this.tsm_Bisection.Name = "tsm_Bisection";
-            this.tsm_Bisection.Size = new System.Drawing.Size(180, 22);
-            this.tsm_Bisection.Text = "Bisection";
-            this.tsm_Bisection.Click += new System.EventHandler(this.tsm_Bisection_Click);
+            this.btn_ChooseLocal.Location = new System.Drawing.Point(207, 548);
+            this.btn_ChooseLocal.Name = "btn_ChooseLocal";
+            this.btn_ChooseLocal.Size = new System.Drawing.Size(132, 23);
+            this.btn_ChooseLocal.TabIndex = 50;
+            this.btn_ChooseLocal.Text = "Choose Local";
+            this.btn_ChooseLocal.UseVisualStyleBackColor = true;
+            this.btn_ChooseLocal.Click += new System.EventHandler(this.btn_ChooseLocal_Click);
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(238, 525);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(14, 13);
+            this.label22.TabIndex = 54;
+            this.label22.Text = "Y";
+            // 
+            // tb_yloc
+            // 
+            this.tb_yloc.Location = new System.Drawing.Point(253, 522);
+            this.tb_yloc.Name = "tb_yloc";
+            this.tb_yloc.Size = new System.Drawing.Size(41, 20);
+            this.tb_yloc.TabIndex = 53;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(178, 525);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(14, 13);
+            this.label23.TabIndex = 52;
+            this.label23.Text = "X";
+            // 
+            // tb_xloc
+            // 
+            this.tb_xloc.Location = new System.Drawing.Point(193, 522);
+            this.tb_xloc.Name = "tb_xloc";
+            this.tb_xloc.Size = new System.Drawing.Size(41, 20);
+            this.tb_xloc.TabIndex = 51;
+            // 
+            // tb_zloc
+            // 
+            this.tb_zloc.Location = new System.Drawing.Point(317, 522);
+            this.tb_zloc.Name = "tb_zloc";
+            this.tb_zloc.Size = new System.Drawing.Size(42, 20);
+            this.tb_zloc.TabIndex = 56;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(297, 525);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(14, 13);
+            this.label21.TabIndex = 55;
+            this.label21.Text = "Z";
             // 
             // frm_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 583);
+            this.Controls.Add(this.tb_zloc);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.tb_yloc);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.tb_xloc);
+            this.Controls.Add(this.btn_ChooseLocal);
+            this.Controls.Add(this.btn_LocalEx);
+            this.Controls.Add(this.CB_Axes);
             this.Controls.Add(this.btn_SecondPos);
             this.Controls.Add(this.btn_StartPos);
             this.Controls.Add(this.label20);
@@ -720,6 +826,16 @@
         private System.Windows.Forms.ToolStripMenuItem tsm_Median;
         private System.Windows.Forms.ToolStripMenuItem tsm_Height;
         private System.Windows.Forms.ToolStripMenuItem tsm_Bisection;
+        private System.Windows.Forms.ToolStripMenuItem nEWToolStripMenuItem;
+        private System.Windows.Forms.CheckBox CB_Axes;
+        private System.Windows.Forms.Button btn_LocalEx;
+        private System.Windows.Forms.Button btn_ChooseLocal;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox tb_yloc;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox tb_xloc;
+        private System.Windows.Forms.TextBox tb_zloc;
+        private System.Windows.Forms.Label label21;
     }
 }
 

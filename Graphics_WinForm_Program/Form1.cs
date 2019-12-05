@@ -29,6 +29,7 @@ namespace Graphics_WinForm_Program
         public List<Line2D> MorphingFinish = new List<Line2D>();
         public List<Line2D> MorphingGroup = new List<Line2D>();
         const double eps = 0.1;
+        public int LocalX, LocalY;
         Point startPosition;
         public frm_Main()
         {
@@ -781,13 +782,101 @@ namespace Graphics_WinForm_Program
             ChosenGroupOfLines = new List<Line2D>();
         }
 
+        private void nEWToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            lines = new List<Line2D>();
+            DrawAllLines();
+        }
+
+        private void btn_Axes_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void CB_Axes_CheckedChanged(object sender, EventArgs e)
+        {
+            DrawAllLines();
+        }
+
+        private void btn_ChooseLocal_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(tb_xloc.Text) && !string.IsNullOrEmpty(tb_yloc.Text))
+            {
+                int xloc=-800, yloc=-800;
+                Int32.TryParse(tb_xloc.Text, out xloc);
+                Int32.TryParse(tb_yloc.Text, out yloc);
+                if (xloc!=-800 && yloc != -800)
+                {
+                    LocalX = xloc;
+                    LocalY = yloc;
+                }
+            }
+        }
+
+        private void btn_LocalEx_Click(object sender, EventArgs e)
+        {
+            float[,] operation = new float[4, 4];
+            //string st = dgv_Massive.Rows[0].Cells[1].Value.ToString();
+            float.TryParse(dgv_Massive.Rows[0].Cells[0].Value.ToString(), out operation[0, 0]);
+            float.TryParse(dgv_Massive.Rows[0].Cells[1].Value.ToString(), out operation[0, 1]);
+            float.TryParse(dgv_Massive.Rows[0].Cells[2].Value.ToString(), out operation[0, 2]);
+            float.TryParse(dgv_Massive.Rows[0].Cells[3].Value.ToString(), out operation[0, 3]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[0].Value.ToString(), out operation[1, 0]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[1].Value.ToString(), out operation[1, 1]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[2].Value.ToString(), out operation[1, 2]);
+            float.TryParse(dgv_Massive.Rows[1].Cells[3].Value.ToString(), out operation[1, 3]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[0].Value.ToString(), out operation[2, 0]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[1].Value.ToString(), out operation[2, 1]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[2].Value.ToString(), out operation[2, 2]);
+            float.TryParse(dgv_Massive.Rows[2].Cells[3].Value.ToString(), out operation[2, 3]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[0].Value.ToString(), out operation[3, 0]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[1].Value.ToString(), out operation[3, 1]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[2].Value.ToString(), out operation[3, 2]);
+            float.TryParse(dgv_Massive.Rows[3].Cells[3].Value.ToString(), out operation[3, 3]);
+            if (ChosenGroup != null)
+            {
+                double OK = 0;
+                //Отрицательные значения?
+                foreach (Line2D ln2d in ChosenGroup.lines)
+                {
+                    ln2d.A.X -= LocalX;
+                    ln2d.B.X -= LocalX;
+                    ln2d.A.Y -= LocalY;
+                    ln2d.B.Y -= LocalY;
+                    MakeOperation(operation, ln2d, OperationType.Change);
+                    ln2d.A = new Point3D(ln2d.A.X + LocalX, ln2d.A.Y + LocalY, ln2d.A.Z);
+                    ln2d.B = new Point3D(ln2d.B.X + LocalX, ln2d.B.Y + LocalY, ln2d.B.Z);
+                    //ln2d.A.X += LocalX;
+                    //ln2d.B.X += LocalX;
+                    //ln2d.A.Y += LocalY;
+                    //ln2d.B.Y += LocalY;
+                    ln2d.FindParams();
+                }
+            }
+            else if (ChosenLine != null)
+            {
+                Line2D ln2d = ChosenLine;
+                ln2d.A.X -= LocalX;
+                ln2d.B.X -= LocalX;
+                ln2d.A.Y -= LocalY;
+                ln2d.B.Y -= LocalY;
+                MakeOperation(operation, ln2d, OperationType.Change);
+                ln2d.A.X += LocalX;
+                ln2d.B.X += LocalX;
+                ln2d.A.Y += LocalY;
+                ln2d.B.Y += LocalY;
+            }
+            DrawAllLines();
+        }
+
         public void DrawAllLines()
         {
             Graphics g = Graphics.FromImage(PB_Draw.Image);
             g.TranslateTransform((float)maxX / 2, (float)maxY / 2);
             g.ScaleTransform(1, -1);
             g.Clear(Color.White);
-            ShowAxes();
+            if (CB_Axes.Checked)
+                ShowAxes();
             foreach (Line2D line2D in lines)
             {
                 g.DrawLine(new Pen(Color.Black, 1), line2D.Local_A.X, line2D.Local_A.Y, line2D.Local_B.X, line2D.Local_B.Y);
@@ -809,7 +898,7 @@ namespace Graphics_WinForm_Program
             int maxY = Math.Max(line.Local_B.Y, line.Local_A.Y);
             if (CurrentX + 3 >= minX && CurrentX - 3 <= maxX && CurrentY + 3 >= minY && CurrentY - 3 <= maxY)
             {
-                bool res = Math.Abs(CurrentX * line.equation[0] + CurrentY * line.equation[1] + line.equation[2]) < 1000;
+                bool res = Math.Abs(CurrentX * line.equation[0] + CurrentY * line.equation[1] + line.equation[2]) < 2000;
                 if (res)
                 {
                     res = true;
